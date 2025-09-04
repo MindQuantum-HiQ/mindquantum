@@ -1,0 +1,79 @@
+---
+import "../styles/tokens.css";
+import "../styles/global.css";
+import LanguageSwitcher from "../components/LanguageSwitcher.astro";
+import BrandIcon from "../components/BrandIcon.astro";
+import { NAV_MESSAGES } from "../locales/nav";
+import { stripBase, withBase, pathForLang, detectLang } from "../config/urls";
+import { LANGS, DEFAULT_LANG, type Lang } from "../config/i18n";
+import { REPO_URL } from "../config/site";
+const { title = 'MindQuantum', description = 'Quantum computing with MindQuantum', lang } = Astro.props as { title?: string; description?: string; lang?: Lang };
+const BASE = import.meta.env.BASE_URL || '/';
+// In dev, Vite/Astro dev server doesn't serve directory indexes from public.
+// Append `index.html` to API links during dev; keep clean trailing slashes in prod.
+const API_SUFFIX = import.meta.env.DEV ? 'index.html' : '';
+const pathUnbased = stripBase(Astro.url.pathname, BASE);
+const currentLang = ((lang as Lang) || detectLang(pathUnbased)) as Lang;
+const nav = NAV_MESSAGES[currentLang];
+const homeHref = withBase(pathForLang('/', currentLang), BASE);
+
+// Build canonical and hreflang alternates
+const hrefFor = (l: Lang) => withBase(pathForLang(pathUnbased, l), BASE);
+const alternates = Object.fromEntries(LANGS.map((l) => [l, hrefFor(l)])) as Record<Lang, string>;
+const xDefaultHref = hrefFor(DEFAULT_LANG);
+const canonicalHref = hrefFor(currentLang);
+const abs = (href: string) => (Astro.site ? new URL(href, Astro.site).toString() : href);
+---
+<!doctype html>
+<html lang={currentLang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href={`${BASE}favicon.svg`} />
+    <link rel="canonical" href={abs(canonicalHref)} />
+    {Object.entries(alternates).map(([code, href]) => (
+      <link rel="alternate" hreflang={code} href={abs(href)} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={abs(xDefaultHref)} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav">
+        <a class="brand" href={homeHref}>
+          <BrandIcon size={28} />
+          <span>MindQuantum</span>
+        </a>
+        <div class="spacer" />
+        <a href={`${BASE}docs/${currentLang}/`}>{nav.docs}</a>
+        <a href={`${BASE}api/${currentLang}/`}>{nav.api}</a>
+        <a href={REPO_URL} target="_blank" rel="noopener">{nav.repo}</a>
+        <LanguageSwitcher lang={currentLang} />
+      </nav>
+    </header>
+    <main class="container">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="container">
+        <p>© {new Date().getFullYear()} MindQuantum. All rights reserved.</p>
+      </div>
+    </footer>
+  </body>
+  <script>
+    // Persist preferred language for future visits
+    try { localStorage.setItem('mq_lang', document.documentElement.lang || 'en'); } catch (e) {}
+  </script>
+  <style>
+    .site-header { position: sticky; top: 0; backdrop-filter: saturate(150%) blur(6px); background: color-mix(in oklab, var(--mq-surface), transparent 20%); border-bottom: 1px solid var(--mq-border); z-index: 20; }
+    .nav { display: flex; align-items: center; gap: 1rem; padding: .75rem 1rem; max-width: var(--mq-page-max); margin: 0 auto; }
+    .brand { display: inline-flex; align-items: center; gap: .5rem; font-weight: 700; color: var(--mq-text); text-decoration: none; }
+    .brand:hover { color: var(--mq-primary); }
+    .spacer { flex: 1; }
+    .nav a { color: var(--mq-text-muted); text-decoration: none; font-weight: 600; padding: .25rem .5rem; border-radius: .375rem; }
+    .nav a:hover { color: var(--mq-text); background: var(--mq-surface-2); }
+    .container { max-width: var(--mq-page-max); padding: 2rem 1rem; margin: 0 auto; }
+    .site-footer { border-top: 1px solid var(--mq-border); background: var(--mq-surface); color: var(--mq-text-muted); }
+  </style>
+</html>

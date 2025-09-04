@@ -1,0 +1,25 @@
+{
+  "name": "mindquantum-website",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18.14"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "node scripts/prepare-tokens.mjs && astro build",
+    "preview": "astro preview",
+    "build:docs": "node scripts/build-docs.mjs",
+    "build:site": "astro build",
+    "build:all": "npm run build:docs && npm run build:site",
+    "clean:docs": "node scripts/clean-docs.mjs",
+    "sync:docs": "python scripts/sync_mindquantum_from_msdocs.py",
+    "sync:api": "python scripts/sync_mindquantum_api.py",
+    "sync:all": "python scripts/sync_all.py"
+  },
+  "dependencies": {
+    "astro": "^4.10.0",
+    "quantum-circuit": "^0.9.241"
+  }
+}

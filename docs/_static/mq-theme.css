@@ -1,0 +1,45 @@
+/* MindQuantum Jupyter Book theme overrides.
+   This file is loaded after the base theme and variables. */
+
+:root {
+  /* Map shared tokens to Sphinx Book Theme variables when relevant */
+  --pst-color-primary: var(--mq-primary);
+}
+
+/* Global surface colors */
+html[data-theme="light"], :root {
+  --sb-foreground: var(--mq-text);
+  --sb-foreground-muted: var(--mq-text-muted);
+  --sb-background: var(--mq-bg);
+  --sb-surface: var(--mq-surface);
+  --sb-surface-2: var(--mq-surface-2);
+  --sb-border: var(--mq-border);
+}
+
+/* Navbar tweak: add Home link styling parity */
+.mq-home-link {
+  font-weight: 600;
+  color: var(--mq-text);
+  text-decoration: none;
+}
+.mq-home-link:hover { color: var(--mq-primary); }
+
+/* Cards, admonitions, code blocks feel */
+.bd-content .admonition, .bd-content details {
+  border-radius: var(--mq-radius);
+  border-color: var(--mq-border);
+}
+.bd-content pre { border-radius: var(--mq-radius); }
+
+/* Footer */
+.mq-footer { color: var(--mq-text-muted); }
+
+/* Minimal grid to support raw HTML blocks copied from upstream */
+.row { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 1rem; margin: 1rem 0; }
+@media (max-width: 960px) { .row { grid-template-columns: 1fr; } }
+.col-md-6 { display: contents; }
+.doc-article-list { display: grid; gap: 1rem; }
+.doc-article-item { border: 1px solid var(--sb-border); border-radius: var(--mq-radius); background: var(--sb-surface-2); padding: 1rem; }
+.doc-article-item .article-link { text-decoration: none; color: inherit; }
+.doc-article-head { font-weight: 700; margin-bottom: .25rem; }
+.doc-article-desc { color: var(--sb-foreground-muted); }

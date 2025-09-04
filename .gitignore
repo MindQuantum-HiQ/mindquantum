@@ -1,0 +1,24 @@
+# Node
+node_modules/
+.astro/
+dist/
+env.d.ts
+
+# Python / Jupyter Book
+.venv/
+venv
+__pycache__/
+docs/_build/
+docs/en/_build/
+docs/zh/_build/
+docs/en/src/
+docs/zh/src/
+public/docs/
+docs/api-en/api_python_en
+docs/api-zh/api_python
+
+# Local cache of upstream clones
+.upstreams/
+
+# MacOS
+.DS_Store

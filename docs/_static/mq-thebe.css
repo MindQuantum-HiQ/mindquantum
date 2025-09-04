@@ -1,0 +1,409 @@
+/* MindQuantum — Thebe UX enhancements (per‑cell Run + banner) */
+
+/* Top banner - refined with subtle animations and better visual hierarchy */
+.mq-thebe-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: .875rem 1.125rem;
+  margin: 1rem 0 1.5rem;
+  border: 1px solid var(--sb-border);
+  border-left: 3px solid var(--mq-primary);
+  border-radius: calc(var(--mq-radius) * 0.75);
+  background: linear-gradient(
+    135deg,
+    var(--sb-surface-2),
+    color-mix(in oklab, var(--sb-surface-2), var(--sb-surface) 50%)
+  );
+  box-shadow: 0 2px 4px rgba(0,0,0,.03), 0 6px 12px rgba(0,0,0,.04);
+  position: relative;
+  overflow: hidden;
+  animation: fadeInUp 0.4s ease-out;
+}
+
+/* Subtle gradient overlay for depth */
+.mq-thebe-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--mq-primary),
+    transparent 50%
+  );
+  opacity: 0.15;
+}
+
+/* Dark theme: very subtle overlay */
+html[data-theme="dark"] .mq-thebe-banner::before {
+  opacity: 0.05;
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--mq-primary), black 50%),
+    transparent 30%
+  );
+}
+
+.mq-thebe-banner .mq-text {
+  flex: 1 1 auto;
+  color: var(--sb-foreground);
+  font-size: 0.925rem;
+  line-height: 1.5;
+}
+
+.mq-thebe-banner .mq-actions { 
+  display: flex; 
+  gap: .625rem;
+  align-items: center;
+}
+
+/* Refined button styles matching Jupyter Book aesthetic */
+.mq-thebe-banner .mq-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  height: 32px;
+  padding: 0 .875rem;
+  border-radius: 6px;
+  font-size: .875rem;
+  font-weight: 500;
+  line-height: 1;
+  border: 1px solid var(--sb-border);
+  background: var(--sb-surface);
+  color: var(--sb-foreground);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover effect with subtle lift */
+.mq-thebe-banner .mq-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,.08), 0 4px 12px rgba(0,0,0,.04);
+  background: var(--sb-background);
+  border-color: color-mix(in oklab, var(--sb-border), var(--mq-primary) 20%);
+}
+
+/* Active state */
+.mq-thebe-banner .mq-btn:active {
+  transform: translateY(0);
+  transition-duration: 0.1s;
+}
+
+/* Primary button with refined gradient */
+.mq-thebe-banner .mq-btn-primary {
+  background: linear-gradient(
+    135deg,
+    var(--mq-primary),
+    color-mix(in oklab, var(--mq-primary), black 5%)
+  );
+  color: var(--mq-primary-contrast);
+  border-color: color-mix(in oklab, var(--mq-primary), black 10%);
+  font-weight: 600;
+}
+
+.mq-thebe-banner .mq-btn-primary:hover {
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--mq-primary), white 5%),
+    var(--mq-primary)
+  );
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px color-mix(in oklab, var(--mq-primary), transparent 70%),
+              0 2px 4px rgba(0,0,0,.1);
+  border-color: color-mix(in oklab, var(--mq-primary), black 5%);
+}
+
+/* Icon animations */
+.mq-thebe-banner .mq-btn i {
+  transition: transform 0.3s ease;
+}
+
+.mq-thebe-banner .mq-btn:hover i {
+  transform: scale(1.1);
+}
+
+/* Dismiss button - minimal and subtle */
+.mq-thebe-banner .mq-dismiss {
+  margin-left: .5rem;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  color: var(--sb-foreground-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.mq-thebe-banner .mq-dismiss:hover {
+  background: var(--sb-surface);
+  border-color: var(--sb-border);
+  color: var(--sb-foreground);
+  transform: rotate(90deg);
+}
+
+/* Status indicator with pulse animation */
+.thebe-status {
+  margin-left: .5rem;
+  font-family: var(--mq-font-mono);
+  font-size: .8125rem;
+  color: var(--sb-foreground-muted);
+  animation: pulse 2s infinite;
+}
+
+/* Dark theme: ensure status text is visible but muted */
+html[data-theme="dark"] .thebe-status {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+html[data-theme="dark"] .mq-thebe-banner .mq-text {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Per‑cell Run button - positioned next to copy button */
+.bd-article .cell_input.docutils.container { 
+  position: relative; 
+}
+
+.mq-run-btn {
+  position: absolute;
+  top: .3em;
+  right: .3em;
+  width: 1.7em;
+  height: 1.7em;
+  border-radius: 0.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  color: #57606a;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s, border .3s, background-color .3s, transform 0.2s;
+  z-index: 4; /* Just below copy button */
+  padding: 0;
+  outline: none;
+  user-select: none;
+}
+
+/* Show on hover - matching copy button behavior */
+.cell_input:hover .mq-run-btn,
+.cell:hover .mq-run-btn,
+.highlight:hover .mq-run-btn,
+.mq-run-btn:hover,
+.mq-run-btn:focus,
+.mq-run-btn.is-busy {
+  opacity: 1 !important;
+}
+
+/* Also show when parent containers are hovered (for Thebe-modified DOM) */
+.thebelab-cell:hover .mq-run-btn,
+.jp-InputArea:hover .mq-run-btn,
+.thebelab-input:hover .mq-run-btn {
+  opacity: 1 !important;
+}
+
+/* Hover state - matching copy button style */
+.mq-run-btn:hover {
+  background-color: rgb(235, 235, 235);
+}
+
+/* Active state - matching copy button style */
+.mq-run-btn:active {
+  background-color: rgb(187, 187, 187);
+}
+
+/* Focus state for accessibility */
+.mq-run-btn:focus-visible {
+  outline: 2px solid var(--mq-primary);
+  outline-offset: 2px;
+  opacity: 1;
+}
+
+/* Running/busy state */
+.mq-run-btn.is-busy {
+  border-color: #22863a;
+  color: #22863a;
+}
+
+.mq-run-btn.is-busy .mq-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Icon styling - using SVG like copy button */
+.mq-run-btn svg {
+  stroke: currentColor;
+  width: 1.5em;
+  height: 1.5em;
+  padding: 0.1em;
+}
+
+/* Hide tooltip for run button as well for consistency */
+.mq-run-btn::after,
+.mq-run-btn::before {
+  display: none !important;
+}
+
+/* Adjust position when there's a copy button - place to the left of it */
+.cell_input:has(.copybtn) .mq-run-btn,
+.highlight:has(.copybtn) ~ .mq-run-btn {
+  right: 2.3em; /* Position to the left of copy button */
+}
+
+/* Visual harmony with copy button when both visible */
+.cell_input:hover .copybtn,
+.cell_input:hover .mq-run-btn,
+.cell:hover .copybtn,
+.cell:hover .mq-run-btn,
+.highlight:hover .copybtn,
+.highlight:hover ~ .mq-run-btn,
+.docutils.container:hover .mq-run-btn,
+.docutils.container:hover .copybtn {
+  opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .mq-thebe-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .75rem;
+    padding: .75rem 1rem;
+  }
+  
+  .mq-thebe-banner .mq-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  
+  /* Keep button size consistent on mobile */
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .mq-run-btn,
+  .mq-run-btn:hover,
+  .mq-thebe-banner,
+  .mq-thebe-banner .mq-btn,
+  .mq-thebe-banner .mq-btn:hover,
+  .thebe-status {
+    animation: none;
+    transition: none;
+    transform: none;
+  }
+  
+  .mq-run-btn.is-busy .mq-icon {
+    animation: none;
+  }
+}
+
+/* Dark theme adjustments - much darker */
+html[data-theme="dark"] .mq-thebe-banner {
+  background: rgba(30, 30, 30, 0.5);
+  box-shadow: 0 1px 2px rgba(0,0,0,.2);
+  border-color: rgba(255, 255, 255, 0.1);
+  border-left-color: color-mix(in oklab, var(--mq-primary), black 30%);
+}
+
+html[data-theme="dark"] .mq-thebe-banner .mq-btn {
+  background: rgba(40, 40, 40, 0.6);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+html[data-theme="dark"] .mq-thebe-banner .mq-btn:hover {
+  background: rgba(50, 50, 50, 0.8);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+}
+
+html[data-theme="dark"] .mq-thebe-banner .mq-btn-primary {
+  background: color-mix(in oklab, var(--mq-primary), black 40%);
+  color: rgba(255, 255, 255, 0.9);
+  border-color: transparent;
+}
+
+html[data-theme="dark"] .mq-thebe-banner .mq-btn-primary:hover {
+  background: color-mix(in oklab, var(--mq-primary), black 30%);
+  box-shadow: 0 2px 8px rgba(0,0,0,.3);
+  color: white;
+}
+
+html[data-theme="dark"] .mq-thebe-banner .mq-dismiss {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+html[data-theme="dark"] .mq-thebe-banner .mq-dismiss:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Dark theme - match GitHub's dark mode button colors */
+html[data-theme="dark"] .mq-run-btn {
+  background-color: transparent;
+  border-color: transparent;
+  color: #8b949e;
+}
+
+html[data-theme="dark"] .mq-run-btn:hover {
+  background-color: #21262d;
+  border-color: #30363d;
+}
+
+html[data-theme="dark"] .mq-run-btn:active {
+  background-color: #484f58;
+}
+
+html[data-theme="dark"] .mq-run-btn.is-busy {
+  border-color: #3fb950;
+  color: #3fb950;
+}
+
+/* Smooth entry animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Hide copy button tooltip */
+.copybtn::after,
+.copybtn::before {
+  display: none !important;
+}
+
+/* Print styles */
+@media print {
+  .mq-thebe-banner,
+  .mq-run-btn {
+    display: none !important;
+  }
+}
