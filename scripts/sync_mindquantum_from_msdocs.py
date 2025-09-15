@@ -13,6 +13,7 @@ The build remains independent; this script vendors content as needed.
 """
 from __future__ import annotations
 import os
+import re
 import argparse
 import shutil
 from pathlib import Path
@@ -55,18 +56,31 @@ def copy_tree_filtered(src: Path, dst: Path) -> None:
             shutil.copy2(src_file, dst_file)
 
 
+def _strip_cross_lang_line(txt: str) -> str:
+    """Remove a one-line cross-language link like [查看中文](./RELEASE_CN.md).
+
+    We remove markdown links that target RELEASE*.md in the same folder and
+    collapse redundant blank lines after removal. Keeps the content minimal
+    and avoids MyST cross-ref warnings in Jupyter Books.
+    """
+    pat = re.compile(r"^\s*\[[^\]]+\]\((?:\./)?RELEASE(?:_CN|_EN)?\.md\)\s*$", re.MULTILINE)
+    txt2 = pat.sub("", txt)
+    txt2 = re.sub(r"\n{3,}", "\n\n", txt2)
+    return txt2
+
+
 def write_release_pages(mq_repo: Path) -> None:
     en_src = mq_repo / "RELEASE.md"
     zh_src = mq_repo / "RELEASE_CN.md"
     if en_src.exists():
-        (DEST_EN / "RELEASE.md").write_text(
-            en_src.read_text(encoding="utf-8"), encoding="utf-8"
-        )
+        en_txt = en_src.read_text(encoding="utf-8")
+        en_txt = _strip_cross_lang_line(en_txt)
+        (DEST_EN / "RELEASE.md").write_text(en_txt, encoding="utf-8")
         print(f'Wrote EN release → {DEST_EN / "RELEASE.md"}')
     if zh_src.exists():
-        (DEST_ZH / "RELEASE.md").write_text(
-            zh_src.read_text(encoding="utf-8"), encoding="utf-8"
-        )
+        zh_txt = zh_src.read_text(encoding="utf-8")
+        zh_txt = _strip_cross_lang_line(zh_txt)
+        (DEST_ZH / "RELEASE.md").write_text(zh_txt, encoding="utf-8")
         print(f'Wrote ZH release → {DEST_ZH / "RELEASE.md"}')
 
 

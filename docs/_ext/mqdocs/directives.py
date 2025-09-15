@@ -155,12 +155,15 @@ def _import_object_by_fullname(fullname: str):
         return None, None, None
     if not res:
         return None, None, None
-    item = res[0]
-    # Sphinx 7 may add extra fields; pick robustly
+    # import_by_name returns a tuple: (name, obj, parent, modname)
+    # The actual object is the second element
     try:
-        obj = item[1]
-        modname = item[-2]
-        qualname = item[-1]
+        if len(res) >= 2:
+            obj = res[1]
+            modname = res[3] if len(res) > 3 else None
+            qualname = fullname.split('.')[-1]
+        else:
+            return None, None, None
     except Exception:
         return None, None, None
     return obj, modname, qualname

@@ -58,6 +58,8 @@ async function main() {
   await run('node', ['scripts/prepare-tokens.mjs'])
   // Generate _toc.yml for both books (tutorials only)
   await run('python', ['scripts/generate_toc.py'])
+  // Normalize book sources to avoid toctree warnings and fix API tile link
+  await run('python', ['scripts/normalize_book_sources.py'])
   await buildBook('en')
   await buildBook('zh')
   // Build API (Sphinx) and place under /docs/api/{en,zh}

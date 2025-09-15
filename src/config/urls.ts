@@ -32,7 +32,8 @@ export function pathForLang(pathUnbased: string, target: Lang): string {
   }
 
   // Docs and API routes: swap the language segment
-  const m = pathUnbased.match(/^\/(docs(?:\/api)?)\/(en|zh)(\/.*|\/?$)/);
+  // Supported prefixes: "/docs/{lang}/..." and "/api/{lang}/..."
+  const m = pathUnbased.match(/^\/(docs|api)\/(en|zh)(\/.*|\/?$)/);
   if (m) {
     const prefix = m[1];
     const rest = m[3] || "/";
@@ -51,7 +52,7 @@ export function detectLang(pathUnbased: string): Lang {
   // Normalize
   if (!pathUnbased.startsWith("/")) pathUnbased = `/${pathUnbased}`;
   // Docs and API explicit language segment
-  const m = pathUnbased.match(/^\/(docs(?:\/api)?)\/(en|zh)(?:\/|$)/);
+  const m = pathUnbased.match(/^\/(docs|api)\/(en|zh)(?:\/|$)/);
   if (m) return m[2] as Lang;
   // Site-level zh prefix
   if (pathUnbased === "/zh" || pathUnbased.startsWith("/zh/")) return "zh";

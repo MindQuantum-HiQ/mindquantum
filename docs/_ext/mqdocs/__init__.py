@@ -25,11 +25,16 @@ from .directives import (
 )
 from .autogen import on_builder_inited
 from .normalize import normalize_py_property_option
+from .patches import apply_autosummary_adapter
 
 
 def setup(app: Sphinx):
     # Config: optional warnings when CN summary is missing
     app.add_config_value("mqdocs_warn_missing_cn_summary", True, "env")
+    # Config: autosummary behavior adapters (EN by default)
+    app.add_config_value("mqdocs_autosummary_fix_currentmodule", True, "env")
+    app.add_config_value("mqdocs_autosummary_display", "short", "env")  # 'short' | 'full'
+    app.add_config_value("mqdocs_autosummary_scope", "en", "env")  # 'en' | 'all'
 
     # Register directives
     app.add_directive("msmathautosummary", MsMathAutosummary)
@@ -45,6 +50,20 @@ def setup(app: Sphinx):
     app.connect("builder-inited", on_builder_inited)
     # Normalize upstream RST patterns before parsing
     app.connect("source-read", normalize_py_property_option)
+
+    # Adapt stock autosummary rendering per config
+    try:
+        apply_autosummary_adapter(
+            app,
+            display=str(getattr(app.config, "mqdocs_autosummary_display", "short")),
+            fix_currentmodule=bool(
+                getattr(app.config, "mqdocs_autosummary_fix_currentmodule", True)
+            ),
+            scope=str(getattr(app.config, "mqdocs_autosummary_scope", "en")),
+        )
+    except Exception:
+        # Keep builds resilient even if autosummary API changes
+        pass
 
     return {
         "version": "1.0",

@@ -21,7 +21,7 @@ const alternates = Object.fromEntries(
 ) as Record<Lang, string>;
 const abs = (href: string) => (Astro.site ? new URL(href, Astro.site).toString() : href);
 ---
-<BaseLayout title="MindQuantum Docs" description="Guides and tutorials" lang={safeLang}>
+<BaseLayout title="MindQuantum Docs" description="Guides and tutorials" lang={safeLang} fullBleed={true} hideFooter={true}>
   <section>
     <iframe id="mq-docs-frame" src={target} title="MindQuantum Docs" loading="lazy" referrerpolicy="no-referrer-when-downgrade" data-root={DOCS_ROOT} data-default-rel={START_REL} />
   </section>

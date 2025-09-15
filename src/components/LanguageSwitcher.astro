@@ -20,7 +20,7 @@ const label = other === "en" ? "EN" : "中文";
       const a = document.querySelector('a.lang-switcher');
       if (!a) return;
       const p = location.pathname || '';
-      if (/\/docs(\/api)?\//.test(p) && location.hash) {
+      if (/(\/docs|\/api)\//.test(p) && location.hash) {
         a.setAttribute('href', a.getAttribute('href').replace(/#.*$/, '') + location.hash);
       }
     } catch (_) { /* no-op */ }
