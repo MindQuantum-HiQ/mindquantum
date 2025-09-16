@@ -36,6 +36,23 @@ async function buildBook(lang) {
   console.log(`Copied ${lang} book → ${dst}`)
 }
 
+async function buildCourses() {
+  const proj = resolve('courses')
+  const outRoot = resolve('courses/_build/book')
+  const dst = resolve('public/courses')
+  await run('jupyter-book', ['build', proj, '--path-output', outRoot])
+  const src = resolve(outRoot, '_build/html')
+  const fallback = resolve('courses/_build/html')
+  const finalSrc = (await exists(src)) ? src : fallback
+  if (!(await exists(finalSrc))) {
+    throw new Error(`Could not locate Jupyter Book HTML output for courses. Tried: \n- ${src}\n- ${fallback}`)
+  }
+  if (await exists(dst)) await rm(dst, { recursive: true, force: true })
+  await mkdir(dst, { recursive: true })
+  await cp(finalSrc, dst, { recursive: true })
+  console.log(`Copied courses book → ${dst}`)
+}
+
 async function buildSphinx(api, lang) {
   const proj = resolve(`docs/${api}`) // api-en or api-zh
   const out = resolve(`docs/_build/api/${lang}`)
@@ -62,6 +79,7 @@ async function main() {
   await run('python', ['scripts/normalize_book_sources.py'])
   await buildBook('en')
   await buildBook('zh')
+  await buildCourses()
   // Build API (Sphinx) and place under /docs/api/{en,zh}
   await buildSphinx('api-en', 'en')
   await buildSphinx('api-zh', 'zh')

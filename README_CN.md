@@ -6,6 +6,7 @@ MindQuantum 网站和双语文档的 Astro + Jupyter Book 单一代码库。
 
 - Astro 驱动主页和整个网站外壳。
 - Jupyter Book 仅构建双语教程（英文+中文）。
+- Jupyter Book 还会构建位于 `/courses` 下的独立课程笔记本。
 - Sphinx 使用内部 `mqdocs` 扩展构建两个项目（英文+中文）的 API 参考。
 - 共享设计令牌保持两者之间的视觉一致性。
 - GitHub Pages 工作流同时构建和部署这两个输出。
@@ -82,12 +83,13 @@ sphinx-build -b html docs/api-zh docs/_build/api/zh
 
 ## 构建和部署
 
-- `npm run build:all` 将 Jupyter Books 和 Sphinx 构建到 `public/docs/**`，然后将 Astro 构建到 `dist/`。临时工件集中在 `docs/_build/` 下。
+- `npm run build:all` 会将 Jupyter Books（教程 + 课程）和 Sphinx 构建到 `public/{docs,courses}/**`，然后将 Astro 构建到 `dist/`。临时工件集中在 `docs/_build/` 与 `courses/_build/` 下。
 - GitHub Actions 工作流 `.github/workflows/deploy.yml` 会构建两者并将 `dist/` 文件夹部署到 GitHub Pages。Astro 的基本路径会为项目页面自动计算。
 
 ## 文档路由
 
 - 教程 (Jupyter Book)：`/docs/en` 和 `/docs/zh` (来自 `public/docs/en` 和 `public/docs/zh`)。
+- 课程 (Jupyter Book)：`/courses` (来自 `public/courses`)。
 - API (Sphinx)：`/docs/api/en` 和 `/docs/api/zh` (来自 `public/docs/api/en` 和 `public/docs/api/zh`)。
 - 网站头部应链接到两种语言的教程和 API。
 

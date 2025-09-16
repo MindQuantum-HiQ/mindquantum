@@ -36,7 +36,7 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
       subtitle:
         "Build and simulate quantum circuits with performance, clarity, and delightful docs.",
       startLabel: "Start Learning",
-      repoLabel: "Gitee",
+      repoLabel: "Source Code",
     },
     features: [
       {
@@ -71,12 +71,13 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
       title: "MindQuantum",
       subtitle: "高性能、清晰易用的量子电路构建与模拟，并配备优质文档。",
       startLabel: "开始学习",
-      repoLabel: "Gitee",
+      repoLabel: "查看源码",
     },
     features: [
       { title: "高速模拟器", description: "面向科研与教学的一流量子模拟器。" },
       { title: "友好 API", description: "优雅的 Python 接口，配以丰富的文档和示例。" },
       { title: "优秀文档", description: "教程风格统一、可读性好，支持在线运行。" },
+      { title: "系统课程", description: "19 节循序渐进的中文课程，涵盖量子比特、量子门、算法与模拟等核心主题。" },
     ],
     docs: {
       heading: "文档",

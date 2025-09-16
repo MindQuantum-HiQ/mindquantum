@@ -1,0 +1,84 @@
+---
+import type { Lang } from "../../config/i18n";
+import { COMMUNITY_LINKS, type CommunityLinkId } from "../../config/community";
+import { COMMUNITY_MESSAGES } from "../../locales/community";
+
+interface Props {
+  lang: Lang;
+  variant: "menu" | "cards";
+  class?: string;
+}
+
+const { lang, variant } = Astro.props as Props;
+const messages = COMMUNITY_MESSAGES[lang];
+
+const labelFor = (id: CommunityLinkId) => messages.items[id].label;
+const descFor = (id: CommunityLinkId) => messages.items[id].description;
+const ctaFor = (id: CommunityLinkId) => messages.items[id].cta;
+---
+{variant === 'menu' && (
+  <ul class={Astro.props.class || 'community-menu'} role="menu">
+    {COMMUNITY_LINKS.map((link) => (
+      <li role="none">
+        <a role="menuitem" href={link.href} target="_blank" rel="noopener" data-analytics={`community:${link.id}`}>
+          <span>{labelFor(link.id)}</span>
+          <span class="sr-only"> {messages.opensInNewTab}</span>
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" class="ext-icon">
+            <path fill="currentColor" d="M14 3h7v7h-2V6.414l-9.293 9.293l-1.414-1.414L17.586 5H14V3ZM5 5h6v2H7v10h10v-4h2v6H5V5Z"/>
+          </svg>
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
+
+{variant === 'cards' && (
+  <div class={Astro.props.class || 'community-cards'}>
+    {COMMUNITY_LINKS.map((link) => (
+      <article class="card">
+        <header class="card-header">
+          <div class="icon" aria-hidden="true">
+            {link.id === 'repo' && (
+              <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4 3h12a2 2 0 0 1 2 2v13l-4-2l-4 2l-4-2l-4 2V5a2 2 0 0 1 2-2Z"/></svg>
+            )}
+            {link.id === 'website' && (
+              <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2Zm0 2a7.956 7.956 0 0 1 5.292 2.037A17.3 17.3 0 0 0 12 6a17.3 17.3 0 0 0-5.292.037A7.956 7.956 0 0 1 12 4Zm0 16a8 8 0 0 1-6.809-3.826A15.4 15.4 0 0 1 12 15a15.4 15.4 0 0 1 6.809 1.174A8 8 0 0 1 12 20Zm8-3.12A17.351 17.351 0 0 0 12 13a17.351 17.351 0 0 0-8 3.88V12a8 8 0 1 1 16 0Z"/></svg>
+            )}
+            {link.id === 'evangelists' && (
+              <svg width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 12a5 5 0 1 0-5-5a5 5 0 0 0 5 5Zm-7 9a7 7 0 1 1 14 0Z"/></svg>
+            )}
+          </div>
+          <h3>{labelFor(link.id)}</h3>
+        </header>
+        <p class="desc">{descFor(link.id)}</p>
+        <p>
+          <a class="btn" href={link.href} target="_blank" rel="noopener" data-analytics={`community:${link.id}`}>
+            {ctaFor(link.id)}
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" class="ext-icon">
+              <path fill="currentColor" d="M14 3h7v7h-2V6.414l-9.293 9.293l-1.414-1.414L17.586 5H14V3ZM5 5h6v2H7v10h10v-4h2v6H5V5Z"/>
+            </svg>
+          </a>
+        </p>
+      </article>
+    ))}
+  </div>
+)}
+
+<style>
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+  .community-menu { list-style: none; margin: 0; padding: .25rem; }
+  .community-menu a { display: flex; align-items: center; gap: .5rem; padding: .375rem .5rem; border-radius: .375rem; color: var(--mq-text-muted); text-decoration: none; }
+  .community-menu a:hover, .community-menu a:focus { color: var(--mq-text); background: var(--mq-surface-2); outline: none; }
+  .community-menu .ext-icon { opacity: .7; }
+
+  .community-cards { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+  @media (min-width: 720px) { .community-cards { grid-template-columns: repeat(3, 1fr); } }
+  .card { background: var(--mq-surface); border: 1px solid var(--mq-border); border-radius: .5rem; padding: 1rem; display: flex; flex-direction: column; gap: .5rem; }
+  .card-header { display: flex; align-items: center; gap: .5rem; }
+  .card-header .icon { color: var(--mq-primary); }
+  .card h3 { margin: 0; font-size: 1.125rem; }
+  .desc { color: var(--mq-text-muted); margin: 0; }
+  .btn { display: inline-flex; align-items: center; gap: .375rem; padding: .375rem .625rem; border-radius: .375rem; background: var(--mq-surface-2); color: var(--mq-text); text-decoration: none; font-weight: 600; }
+  .btn:hover { background: color-mix(in oklab, var(--mq-surface-2), var(--mq-primary) 12%); }
+  .ext-icon { vertical-align: middle; }
+</style>

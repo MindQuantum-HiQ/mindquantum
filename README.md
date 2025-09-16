@@ -6,6 +6,7 @@ Astro + Jupyter Book monorepo for the MindQuantum website and bilingual document
 
 - Astro powers the homepage and overall site shell.
 - Jupyter Book builds bilingual tutorials only (EN+ZH).
+- Jupyter Book also builds the self-contained course notebooks under `/courses`.
 - Sphinx builds the API reference as two projects (EN+ZH) using the internal `mqdocs` extension.
 - Shared design tokens keep visual consistency across both.
 - GitHub Pages workflow builds and deploys both outputs together.
@@ -82,12 +83,13 @@ The extension avoids monkey-patches and implements stable `mscnautosummary`/`ms*
 
 ## Build and Deploy
 
-- `npm run build:all` builds Jupyter Books and Sphinx into `public/docs/**`, then builds Astro into `dist/`. Temporary artifacts are centralized under `docs/_build/`.
+- `npm run build:all` builds Jupyter Books (tutorials + courses) and Sphinx into `public/{docs,courses}/**`, then builds Astro into `dist/`. Temporary artifacts are centralized under `docs/_build/` and `courses/_build/`.
 - GitHub Actions workflow `.github/workflows/deploy.yml` builds both and deploys the `dist/` folder to GitHub Pages. The Astro base path is computed automatically for project pages.
 
 ## Docs Routing
 
 - Tutorials (Jupyter Book): `/docs/en` and `/docs/zh` (from `public/docs/en` and `public/docs/zh`).
+- Courses (Jupyter Book): `/courses` (from `public/courses`).
 - API (Sphinx): `/docs/api/en` and `/docs/api/zh` (from `public/docs/api/en` and `public/docs/api/zh`).
 - The site header should link to Tutorials and API for both languages.
 

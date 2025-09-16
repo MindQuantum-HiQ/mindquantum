@@ -40,6 +40,11 @@ export function pathForLang(pathUnbased: string, target: Lang): string {
     return `/${prefix}/${target}${rest}`;
   }
 
+  // Courses are currently language-agnostic (single Jupyter Book)
+  if (pathUnbased.startsWith('/courses')) {
+    return pathUnbased;
+  }
+
   // Fallback: keep as-is for default language, or prefix for non-default
   return target === DEFAULT_LANG ? pathUnbased : `/${target}${pathUnbased}`;
 }
@@ -56,6 +61,7 @@ export function detectLang(pathUnbased: string): Lang {
   if (m) return m[2] as Lang;
   // Site-level zh prefix
   if (pathUnbased === "/zh" || pathUnbased.startsWith("/zh/")) return "zh";
+  if (pathUnbased === "/courses" || pathUnbased.startsWith("/courses/")) return "zh";
   // Root and everything else defaults to DEFAULT_LANG
   return DEFAULT_LANG;
 }

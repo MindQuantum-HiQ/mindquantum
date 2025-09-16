@@ -1,0 +1,82 @@
+# Jupyter Book configuration for the MindQuantum courses workspace
+
+################################################################################
+# Site metadata
+################################################################################
+
+title: MindQuantum Courses
+description: "系统化的 MindQuantum 量子计算课程"
+subtitle: MindQuantum 在线课程
+language: zh
+only_build_toc_files: true
+keywords:
+  - MindQuantum
+  - 量子计算
+  - 课程
+  - 教学
+
+################################################################################
+# Parsing / execution
+################################################################################
+
+parse:
+  myst_enable_extensions:
+    - deflist
+    - colon_fence
+    - dollarmath
+    - amsmath
+    - linkify
+execute:
+  execute_notebooks: off
+
+################################################################################
+# HTML options
+################################################################################
+
+html:
+  favicon: ../docs/_static/favicon.svg
+  use_edit_page_button: false
+  use_repository_button: false
+  use_issues_button: false
+  extra_navbar: |
+    <a href="../" class="mq-home-link">← 返回首页</a>
+
+launch_buttons:
+  thebe: true
+
+theme:
+  name: sphinx_book_theme
+  logo: ../docs/_static/favicon.svg
+  options:
+    navigation_depth: 2
+    show_toc_level: 2
+    use_download_button: true
+    use_fullscreen_button: false
+
+################################################################################
+# Sphinx configuration
+################################################################################
+
+sphinx:
+  extra_extensions:
+    - sphinx.ext.autodoc
+    - sphinx.ext.autosummary
+    - sphinx.ext.napoleon
+    - sphinx.ext.mathjax
+    - IPython.sphinxext.ipython_console_highlighting
+  config:
+    author: "MindQuantum Contributors"
+    copyright: "2025, MindQuantum"
+    language: zh
+    html_static_path:
+      - ../docs/_static
+    html_css_files:
+      - mq-variables.css
+      - mq-theme.css
+      - mq-thebe.css
+    html_js_files:
+      - mq-thebe.js
+    thebe_config:
+      repository_url: https://github.com/MindQuantum-HiQ/mq-env
+      repository_branch: main
+      binderhub_url: https://mybinder.org

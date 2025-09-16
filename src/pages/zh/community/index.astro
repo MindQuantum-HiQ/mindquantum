@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import type { Lang } from "../../../config/i18n";
+import { COMMUNITY_MESSAGES } from "../../../locales/community";
+import CommunityLinks from "../../../components/community/CommunityLinks.astro";
+
+const lang: Lang = 'zh';
+const messages = COMMUNITY_MESSAGES[lang];
+---
+<BaseLayout lang={lang} title={`MindQuantum – ${messages.title}`} description={messages.subtitle}>
+  <section class="hub-hero">
+    <h1>{messages.title}</h1>
+    <p class="subtitle">{messages.subtitle}</p>
+  </section>
+  <section>
+    <CommunityLinks lang={lang} variant="cards" />
+  </section>
+</BaseLayout>
+
+<style>
+  .hub-hero { margin-bottom: 1rem; }
+  .hub-hero .subtitle { color: var(--mq-text-muted); }
+</style>
+

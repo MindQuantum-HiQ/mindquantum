@@ -2,8 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { LANGS, DEFAULT_LANG, type Lang } from "../../config/i18n";
 import { HOME_MESSAGES } from "../../locales/home";
-import QuantumCircuitBuilder from "../../components/QuantumCircuitBuilder.astro";
-import { REPO_URL } from "../../config/site";
+import HomePage from "../../components/home/HomePage.astro";
 
 // Generate localized home pages for non-default languages (e.g., zh)
 export function getStaticPaths() {
@@ -16,51 +15,9 @@ const { lang } = Astro.params as { lang?: string };
 const safeLang: Lang = LANGS.includes((lang as Lang) || ("" as Lang))
   ? (lang as Lang)
   : DEFAULT_LANG;
-const t = HOME_MESSAGES[safeLang];
+const messages = HOME_MESSAGES[safeLang];
 const BASE = import.meta.env.BASE_URL || '/';
 ---
-<BaseLayout lang={safeLang} title="MindQuantum" description={t.metaDescription}>
-  <section class="hero">
-    <h1>{t.hero.title}</h1>
-    <p>{t.hero.subtitle}</p>
-    <div class="actions">
-      <a class="btn primary" href={`${BASE}docs/${safeLang}/`}>{t.hero.startLabel}</a>
-      <a class="btn" href={REPO_URL} target="_blank" rel="noopener">{t.hero.repoLabel}</a>
-    </div>
-  </section>
-
-  <section class="features">
-    {t.features.map((f) => (
-      <div class="feature">
-        <h3>{f.title}</h3>
-        <p>{f.description}</p>
-      </div>
-    ))}
-  </section>
-
-  <section>
-    <QuantumCircuitBuilder lang={safeLang} heading={t.builder?.heading || 'Interactive Circuit'} />
-  </section>
-
-  <section>
-    <h2>{t.docs.heading}</h2>
-    <p>
-      {t.docs.blurbBeforeLink}
-      <a href={`${BASE}docs/`}>{t.docs.linkLabel}</a>
-      {t.docs.blurbAfterLink}
-    </p>
-  </section>
-
-  <style>
-    .hero { padding: 6rem 0 3rem; text-align: center; }
-    .hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); line-height: 1.05; margin: 0 0 1rem; }
-    .hero p { color: var(--mq-text-muted); font-size: 1.125rem; margin: 0 auto 1.5rem; max-width: 52ch; }
-    .actions { display: flex; gap: .75rem; justify-content: center; }
-    .btn { display: inline-block; padding: .625rem 1rem; border-radius: .5rem; border: 1px solid var(--mq-border); color: var(--mq-text); text-decoration: none; background: var(--mq-surface-2); }
-    .btn.primary { background: var(--mq-primary); border-color: color-mix(in oklab, var(--mq-primary), black 10%); color: white; }
-    .btn:hover { filter: brightness(1.05); }
-    .features { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem; margin: 2rem 0 3rem; }
-    @media (max-width: 960px) { .features { grid-template-columns: 1fr; } }
-    .feature { padding: 1rem; border: 1px solid var(--mq-border); border-radius: .75rem; background: var(--mq-surface-2); }
-  </style>
+<BaseLayout lang={safeLang} title="MindQuantum" description={messages.metaDescription}>
+  <HomePage lang={safeLang} messages={messages} baseUrl={BASE} />
 </BaseLayout>

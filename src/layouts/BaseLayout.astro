@@ -6,7 +6,7 @@ import BrandIcon from "../components/BrandIcon.astro";
 import { NAV_MESSAGES } from "../locales/nav";
 import { stripBase, withBase, pathForLang, detectLang } from "../config/urls";
 import { LANGS, DEFAULT_LANG, type Lang } from "../config/i18n";
-import { REPO_URL } from "../config/site";
+import CommunityLinks from "../components/community/CommunityLinks.astro";
 const { title = 'MindQuantum', description = 'Quantum computing with MindQuantum', lang, fullBleed = false, hideFooter = false } = Astro.props as { title?: string; description?: string; lang?: Lang; fullBleed?: boolean; hideFooter?: boolean };
 const BASE = import.meta.env.BASE_URL || '/';
 const pathUnbased = stripBase(Astro.url.pathname, BASE);
@@ -44,9 +44,15 @@ const abs = (href: string) => (Astro.site ? new URL(href, Astro.site).toString()
           <span>MindQuantum</span>
         </a>
         <div class="spacer" />
+        {nav.courses && <a href={`${BASE}courses/`}>{nav.courses}</a>}
         <a href={`${BASE}docs/${currentLang}/`}>{nav.docs}</a>
         <a href={`${BASE}api/${currentLang}/#/${apiOverviewRel}`}>{nav.api}</a>
-        <a href={REPO_URL} target="_blank" rel="noopener">{nav.repo}</a>
+        <div class="nav-group" data-kind="community">
+          <a class="nav-label" href={withBase(pathForLang('/community/', currentLang), BASE)} aria-haspopup="menu">{nav.community}</a>
+          <div class="nav-menu" role="menu">
+            <CommunityLinks lang={currentLang} variant="menu" />
+          </div>
+        </div>
         <LanguageSwitcher lang={currentLang} />
       </nav>
     </header>
@@ -73,6 +79,13 @@ const abs = (href: string) => (Astro.site ? new URL(href, Astro.site).toString()
     .spacer { flex: 1; }
     .nav a { color: var(--mq-text-muted); text-decoration: none; font-weight: 600; padding: .25rem .5rem; border-radius: .375rem; }
     .nav a:hover { color: var(--mq-text); background: var(--mq-surface-2); }
+    .nav-group { position: relative; display: inline-flex; align-items: center; }
+    .nav-group .nav-label { padding-right: .25rem; }
+    .nav-menu { position: absolute; top: 100%; right: 0; margin-top: 0; background: var(--mq-surface); border: 1px solid var(--mq-border); border-radius: .5rem; min-width: 14rem; box-shadow: 0 6px 24px rgba(0,0,0,.08); padding: .25rem; z-index: 25; display: none; }
+    .nav-group:hover .nav-menu,
+    .nav-group:focus-within .nav-menu { display: block; }
+    @media (hover: none) { .nav-group .nav-menu { display: none !important; } }
+    @media (max-width: 640px) { .nav-menu { right: auto; left: 0; min-width: 12rem; } }
     .container { max-width: var(--mq-page-max); padding: 2rem 1rem; margin: 0 auto; }
     .container.full-bleed { max-width: none; padding: 0; margin: 0; }
     .site-footer { border-top: 1px solid var(--mq-border); background: var(--mq-surface); color: var(--mq-text-muted); }

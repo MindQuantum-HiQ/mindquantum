@@ -1,0 +1,107 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import type { Lang } from "../../config/i18n";
+
+// Courses materials are currently Chinese-only, so force the layout language to zh for consistent chrome
+const lang: Lang = 'zh';
+const BASE = import.meta.env.BASE_URL || '/';
+const COURSES_ROOT = `${BASE}courses/`;
+const START = `${COURSES_ROOT}index.html`;
+---
+<BaseLayout lang={lang} title="MindQuantum Courses" description="MindQuantum 量子计算课程" fullBleed={true} hideFooter={true}>
+  <section>
+    <iframe
+      id="mq-courses-frame"
+      src={START}
+      title="MindQuantum Courses"
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      data-root={COURSES_ROOT}
+    />
+  </section>
+  <script>
+    const iframe = document.getElementById('mq-courses-frame');
+    const header = document.querySelector('.site-header');
+
+    function sizeFrame() {
+      const h = header ? header.offsetHeight : 0;
+      iframe.style.height = `calc(100vh - ${h}px)`;
+    }
+    addEventListener('resize', sizeFrame);
+    addEventListener('load', sizeFrame);
+    sizeFrame();
+
+    const ROOT = iframe.dataset.root || '/courses/';
+    const DEFAULT_REL = 'index.html';
+
+    function joinUrl(root, rel) {
+      if (!root.endsWith('/')) root += '/';
+      if (rel.startsWith('/')) rel = rel.slice(1);
+      return root + rel;
+    }
+
+    function relFromPathname(pathname, root) {
+      if (!root.endsWith('/')) root += '/';
+      return pathname.startsWith(root) ? pathname.slice(root.length) : null;
+    }
+
+    function normalizeRel(rel) {
+      return rel === 'index.html' ? '' : rel;
+    }
+
+    let suppressHashHandler = false;
+
+    function navigateIframeTo(rel, replace=false) {
+      const url = joinUrl(ROOT, rel || DEFAULT_REL);
+      if (replace) iframe.setAttribute('src', url);
+      else iframe.src = url;
+    }
+
+    iframe.addEventListener('load', () => {
+      try {
+        const win = iframe.contentWindow;
+        if (!win || !win.location) return;
+        const path = win.location.pathname + (win.location.search || '') + (win.location.hash || '');
+        const rel = relFromPathname(path, ROOT);
+        if (rel === null) return;
+        const next = normalizeRel(rel);
+        const desiredHash = '#/' + encodeURI(next);
+        if (location.hash !== desiredHash) {
+          suppressHashHandler = true;
+          history.pushState(null, '', desiredHash);
+          suppressHashHandler = false;
+        }
+      } catch (_) {
+        // Ignore cross-origin navigations
+      }
+    });
+
+    function applyHashToIframe(replace=false) {
+      const h = location.hash || '';
+      if (!h.startsWith('#/')) {
+        navigateIframeTo(DEFAULT_REL, replace);
+        return;
+      }
+      const rel = decodeURI(h.slice(2));
+      navigateIframeTo(rel, replace);
+    }
+
+    addEventListener('hashchange', () => {
+      if (suppressHashHandler) return;
+      applyHashToIframe();
+    });
+
+    if (!location.hash || !location.hash.startsWith('#/')) {
+      suppressHashHandler = true;
+      history.replaceState(null, '', '#/' + encodeURI(DEFAULT_REL));
+      suppressHashHandler = false;
+      applyHashToIframe(true);
+    } else {
+      applyHashToIframe(true);
+    }
+  </script>
+  <style>
+    section { padding: 0; }
+    #mq-courses-frame { width: 100%; border: 0; display: block; }
+  </style>
+</BaseLayout>

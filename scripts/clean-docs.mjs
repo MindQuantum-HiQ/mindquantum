@@ -12,6 +12,8 @@ async function main() {
     resolve('docs/en/_build'),
     resolve('docs/zh/_build'),
     resolve('public/docs'),
+    resolve('courses/_build'),
+    resolve('public/courses'),
     resolve('docs/api-en/api_python_en'),
     resolve('docs/api-zh/api_python'),
     resolve('docs/en/src'),
@@ -26,4 +28,3 @@ main().catch((err) => {
   console.error(err)
   process.exit(1)
 })
-
