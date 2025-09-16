@@ -89,7 +89,7 @@ The extension avoids monkey-patches and implements stable `mscnautosummary`/`ms*
 ## Docs Routing
 
 - Tutorials (Jupyter Book): `/docs/en` and `/docs/zh` (from `public/docs/en` and `public/docs/zh`).
-- Courses (Jupyter Book): `/courses` (from `public/courses`).
+- Courses (Jupyter Book): `/courses` (from `public/courses/zh`).
 - API (Sphinx): `/docs/api/en` and `/docs/api/zh` (from `public/docs/api/en` and `public/docs/api/zh`).
 - The site header should link to Tutorials and API for both languages.
 

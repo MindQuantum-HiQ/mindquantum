@@ -39,7 +39,9 @@ async function buildBook(lang) {
 async function buildCourses() {
   const proj = resolve('courses')
   const outRoot = resolve('courses/_build/book')
-  const dst = resolve('public/courses')
+  const dstRoot = resolve('public/courses')
+  const lang = 'zh'
+  const dst = resolve(dstRoot, lang)
   await run('jupyter-book', ['build', proj, '--path-output', outRoot])
   const src = resolve(outRoot, '_build/html')
   const fallback = resolve('courses/_build/html')
@@ -47,10 +49,10 @@ async function buildCourses() {
   if (!(await exists(finalSrc))) {
     throw new Error(`Could not locate Jupyter Book HTML output for courses. Tried: \n- ${src}\n- ${fallback}`)
   }
-  if (await exists(dst)) await rm(dst, { recursive: true, force: true })
+  if (await exists(dstRoot)) await rm(dstRoot, { recursive: true, force: true })
   await mkdir(dst, { recursive: true })
   await cp(finalSrc, dst, { recursive: true })
-  console.log(`Copied courses book → ${dst}`)
+  console.log(`Copied courses (${lang}) book → ${dst}`)
 }
 
 async function buildSphinx(api, lang) {

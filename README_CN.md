@@ -89,7 +89,7 @@ sphinx-build -b html docs/api-zh docs/_build/api/zh
 ## 文档路由
 
 - 教程 (Jupyter Book)：`/docs/en` 和 `/docs/zh` (来自 `public/docs/en` 和 `public/docs/zh`)。
-- 课程 (Jupyter Book)：`/courses` (来自 `public/courses`)。
+- 课程 (Jupyter Book)：`/courses` (来自 `public/courses/zh`)。
 - API (Sphinx)：`/docs/api/en` 和 `/docs/api/zh` (来自 `public/docs/api/en` 和 `public/docs/api/zh`)。
 - 网站头部应链接到两种语言的教程和 API。
 

@@ -51,6 +51,10 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
         title: "Great Docs",
         description: "Consistent and accessible tutorials that support for live execution.",
       },
+      {
+        title: "Systematic Courses",
+        description: "Follow a structured set of 19 notebooks to explore qubits, quantum gates, algorithms, and simulation techniques.",
+      },
     ],
     docs: {
       heading: "Documentation",
