@@ -14,8 +14,10 @@ docs/zh/_build/
 docs/en/src/
 docs/zh/src/
 public/docs/
+public/courses
 docs/api-en/api_python_en
 docs/api-zh/api_python
+courses/_build
 
 # Local cache of upstream clones
 .upstreams/
