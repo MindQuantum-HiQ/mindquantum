@@ -40,11 +40,39 @@ jobs:
         run: |
           npm install --no-fund --no-audit
 
-      - name: Compute base path for GitHub Pages
+      - name: Compute deployment URLs
         shell: bash
         run: |
+          set -euo pipefail
+
           REPO_NAME=$(basename "$GITHUB_REPOSITORY")
-          echo "ASTRO_BASE=/${REPO_NAME}/" >> $GITHUB_ENV
+          OWNER="${GITHUB_REPOSITORY%%/*}"
+          DEFAULT_BASE="/${REPO_NAME}/"
+
+          if [[ -s "public/CNAME" ]]; then
+            ASTRO_BASE_VALUE="/"
+            DOMAIN=$(head -n1 public/CNAME | tr -d '\r')
+            if [[ -n "${DOMAIN}" ]]; then
+              if [[ "${DOMAIN}" =~ ^https?:// ]]; then
+                SITE_URL_VALUE="${DOMAIN}"
+              else
+                SITE_URL_VALUE="https://${DOMAIN}"
+              fi
+            else
+              SITE_URL_VALUE=""
+            fi
+          else
+            ASTRO_BASE_VALUE="${DEFAULT_BASE}"
+            SITE_URL_VALUE="https://${OWNER}.github.io/${REPO_NAME}"
+          fi
+
+          echo "Resolved ASTRO_BASE=${ASTRO_BASE_VALUE}"
+          echo "ASTRO_BASE=${ASTRO_BASE_VALUE}" >> "$GITHUB_ENV"
+
+          if [[ -n "${SITE_URL_VALUE:-}" ]]; then
+            echo "Resolved SITE_URL=${SITE_URL_VALUE}"
+            echo "SITE_URL=${SITE_URL_VALUE}" >> "$GITHUB_ENV"
+          fi
 
       - name: Build docs (JB + Sphinx)
         run: npm run build:docs
@@ -52,6 +80,7 @@ jobs:
       - name: Build site (Astro)
         env:
           ASTRO_BASE: ${{ env.ASTRO_BASE }}
+          SITE_URL: ${{ env.SITE_URL }}
         run: npm run build
 
       - name: Setup Pages

@@ -43,7 +43,9 @@ This approach avoids maintaining a heavy bespoke Sphinx theme while still achiev
 
 ## Deployment
 
-- GitHub Actions computes the correct `ASTRO_BASE` for project pages (e.g., `/mindquantum/`) and sets it during the Astro build.
+- `public/CNAME` is committed so GitHub Pages retains the `mindquantum.org` mapping and the build pipeline can detect the active domain.
+- The deploy workflow reads `public/CNAME` before building Astro: when a custom domain is present it exports `ASTRO_BASE=/` and `SITE_URL=https://mindquantum.org`; otherwise it falls back to `/${repo}/` and the default GitHub Pages URL.
+- Resolved values are logged and exported through `$GITHUB_ENV`, keeping the Astro output (links, sitemap) aligned with the served origin.
 - Artifacts from both builders are uploaded together for a single Pages deployment.
 
 ## Future Enhancements

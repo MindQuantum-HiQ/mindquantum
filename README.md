@@ -84,7 +84,7 @@ The extension avoids monkey-patches and implements stable `mscnautosummary`/`ms*
 ## Build and Deploy
 
 - `npm run build:all` builds Jupyter Books (tutorials + courses) and Sphinx into `public/{docs,courses}/**`, then builds Astro into `dist/`. Temporary artifacts are centralized under `docs/_build/` and `courses/_build/`.
-- GitHub Actions workflow `.github/workflows/deploy.yml` builds both and deploys the `dist/` folder to GitHub Pages. The Astro base path is computed automatically for project pages.
+- GitHub Actions workflow `.github/workflows/deploy.yml` builds both and deploys the `dist/` folder to GitHub Pages. It auto-detects committed custom domains via `public/CNAME`, exporting `ASTRO_BASE` and `SITE_URL` before the Astro build.
 
 ## Docs Routing
 

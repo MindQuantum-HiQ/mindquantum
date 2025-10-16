@@ -43,7 +43,9 @@
 
 ## 部署
 
-- GitHub Actions 计算项目页面（例如 `/mindquantum/`）的正确 `ASTRO_BASE`，并在 Astro 构建期间设置它。
+- 仓库中提交了 `public/CNAME`，以确保 GitHub Pages 保留 `mindquantum.org` 映射，并让构建流程能够检测当前域名。
+- 部署工作流在构建 Astro 前读取 `public/CNAME`：存在自定义域名时导出 `ASTRO_BASE=/` 与 `SITE_URL=https://mindquantum.org`，否则回退到 `/${repo}/` 与默认的 GitHub Pages 地址。
+- 解析后的值会记录并通过 `$GITHUB_ENV` 导出，从而让 Astro 输出（链接、站点地图）与实际来源保持一致。
 - 两个构建器的工件一起上传，用于单次 Pages 部署。
 
 ## 未来增强

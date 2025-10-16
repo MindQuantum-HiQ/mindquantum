@@ -84,7 +84,7 @@ sphinx-build -b html docs/api-zh docs/_build/api/zh
 ## 构建和部署
 
 - `npm run build:all` 会将 Jupyter Books（教程 + 课程）和 Sphinx 构建到 `public/{docs,courses}/**`，然后将 Astro 构建到 `dist/`。临时工件集中在 `docs/_build/` 与 `courses/_build/` 下。
-- GitHub Actions 工作流 `.github/workflows/deploy.yml` 会构建两者并将 `dist/` 文件夹部署到 GitHub Pages。Astro 的基本路径会为项目页面自动计算。
+- GitHub Actions 工作流 `.github/workflows/deploy.yml` 会构建两者并将 `dist/` 文件夹部署到 GitHub Pages。它会通过检测 `public/CNAME` 中提交的自定义域名，在构建前导出 `ASTRO_BASE` 与 `SITE_URL`。
 
 ## 文档路由
 
