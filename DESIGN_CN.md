@@ -29,8 +29,9 @@
 
 ## 主题策略
 
-- `src/styles/tokens.css` 中的共享 CSS 变量用于建模品牌颜色、排版和间距。
-- 构建步骤 (`scripts/prepare-tokens.mjs`) 将令牌同步到 `docs/_static/mq-variables.css`，以便 Jupyter Book 可以使用相同的变量。
+- **采用 Tailwind CSS**：Astro 站点现在使用 Tailwind CSS (v4) 进行快速、一致的 UI 开发。
+- **遗留兼容性**：`src/styles/tokens.css` 定义了核心设计令牌（颜色、排版）作为 CSS 变量。这些变量被 Tailwind 使用（通过 `@theme`），同时也复制到 `docs/_static/mq-variables.css`。
+- **统一品牌**：这种双重方法确保 Jupyter Book/Sphinx 文档（它们难以直接使用 Tailwind）与使用 Tailwind 样式化的主页在视觉上保持一致。
 - `docs/_static/mq-theme.css` 在 `sphinx_book_theme` 之上应用轻量级覆盖，以反映品牌而无需分叉上游主题。
 
 这种方法避免了维护一个繁重的定制 Sphinx 主题，同时仍能实现视觉一致性并保持升级路径简单。
@@ -51,4 +52,4 @@
 ## 未来增强
 
 - 添加版本化文档（例如，通过将多个书籍构建到 `public/docs/vX/` 中）。
-- 如果需要，在 Astro 中用 Tailwind + PostCSS 替换简单的 CSS 堆栈；令牌仍然是事实的来源。
+- 整合 Astro 和 Sphinx 内容的搜索功能。

@@ -1,13 +1,37 @@
-html { color-scheme: light; }
-:root { font-family: var(--mq-font-sans); }
-* { box-sizing: border-box; }
-body { margin: 0; background: var(--mq-bg); color: var(--mq-text); }
-img { max-width: 100%; height: auto; }
-pre, code, kbd, samp { font-family: var(--mq-font-mono); }
-a { color: var(--mq-primary); }
+@import "tailwindcss";
 
-/* Prose */
-.prose { line-height: 1.65; }
-.prose h1, .prose h2, .prose h3 { line-height: 1.2; }
-.prose h2 { margin-top: 2rem; }
+@theme {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
 
+@layer base {
+  :root {
+    /* MQ Component Compatibility Layer - Mapping to new Light Theme */
+    --mq-font-sans: "Inter", system-ui, sans-serif;
+    --mq-font-mono: "JetBrains Mono", monospace;
+
+    --mq-primary: #1c1917; /* stone-900 */
+    --mq-primary-contrast: #ffffff;
+
+    --mq-surface: #ffffff;
+    --mq-surface-2: #fafaf9; /* stone-50 */
+
+    --mq-border: #e7e5e4; /* stone-200 */
+
+    --mq-text: #1c1917; /* stone-900 */
+    --mq-text-muted: #78716c; /* stone-500 */
+
+    --mq-radius: 0.375rem; /* rounded-md */
+    --mq-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  }
+
+  body {
+    @apply bg-white text-stone-900 antialiased selection:bg-blue-100 selection:text-blue-900;
+  }
+}
+
+/* Utility for glassmorphism if needed explicitly, though Tailwind classes are preferred */
+.glass {
+  @apply bg-white/80 backdrop-blur border border-white/20;
+}

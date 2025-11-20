@@ -4,32 +4,32 @@ MindQuantum 网站和双语文档的 Astro + Jupyter Book 单一代码库。
 
 ## 概述
 
-- Astro 驱动主页和整个网站外壳。
+- Astro 驱动主页和整个网站外壳，使用 **Tailwind CSS** 打造现代化的“开放科学”美学。
 - Jupyter Book 仅构建双语教程（英文+中文）。
 - Jupyter Book 还会构建位于 `/courses` 下的独立课程笔记本。
 - Sphinx 使用内部 `mqdocs` 扩展构建两个项目（英文+中文）的 API 参考。
-- 共享设计令牌保持两者之间的视觉一致性。
+- 共享设计令牌保持两者之间的视觉一致性，连接 Tailwind 和 Sphinx 主题。
 - GitHub Pages 工作流同时构建和部署这两个输出。
 
 ## 本地开发
 
 先决条件：Node 18+ 和 Python 3.9+。
 
-1) 安装 Node 依赖
+1. 安装 Node 依赖
 
 ```bash
 npm install
 ```
 
-2) (可选) 创建 Python 虚拟环境并安装 Jupyter Book
+2. (可选) 创建 Python 虚拟环境并安装 Jupyter Book
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install jupyter-book sphinx-copybutton sphinx-design sphinx-thebe mindspore mindquantum
+pip install jupyter-book==1.0.4 sphinx-copybutton sphinx-design sphinx-thebe mindspore mindquantum
 ```
 
-3) 同步文档内容（开发期间可选）
+3. 同步文档内容（开发期间可选）
 
 该仓库在首次运行时可以自动将上游源克隆到本地缓存中。要同步教程和 API 文档：
 
@@ -39,13 +39,13 @@ npm run sync:all            # 如果缺失则克隆，如果存在则重用缓�
 python scripts/sync_all.py --update
 ```
 
-4) 构建文档（教程 + API）
+4. 构建文档（教程 + API）
 
 ```bash
 npm run build:docs   # 自动同步上游，构建 JB（教程）+ Sphinx（API）
 ```
 
-5) 运行网站
+5. 运行网站
 
 ```bash
 npm run dev
@@ -95,7 +95,8 @@ sphinx-build -b html docs/api-zh docs/_build/api/zh
 
 ## 主题
 
-- 共享 CSS 令牌位于 `src/styles/tokens.css`。
+- **Tailwind CSS** (v4) 是 Astro 站点的核心样式引擎。
+- 共享 CSS 令牌位于 `src/styles/tokens.css`（已映射到 Tailwind 主题）。
 - 一个小的构建步骤会将令牌复制到 `docs/_static/mq-variables.css`，以便 Jupyter Book 可以使用它们。
 - Jupyter Book 加载 `mq-variables.css` 和 `mq-theme.css` 以使页面样式与主页保持一致。
 
@@ -115,8 +116,7 @@ sphinx-build -b html docs/api-zh docs/_build/api/zh
 
 - 切换：每个教程页面上都会出现一个“启动/激活”按钮来初始化 Thebe。激活后，每个代码单元格都会显示一个“运行”按钮。
 - 范围：执行由客户端发起；笔记本不会自动执行。这使得构建具有确定性，并能更好地应对流量。
-- 环境：Binder环境由仓库 https://github.com/MindQuantum-HiQ/mq-env 进行配置和控制。
-
+- 环境：Binder 环境由仓库 https://github.com/MindQuantum-HiQ/mq-env 进行配置和控制。
 
 ### 增强的用户体验附加功能
 
@@ -127,6 +127,7 @@ sphinx-build -b html docs/api-zh docs/_build/api/zh
 - 可访问性：按钮包含 `aria-label`；颜色使用共享令牌以确保对比度。默认情况下，叠加层会避开复制按钮，并且如果给定页面上没有 Thebe，则会优雅地回退。
 
 自定义和维护：
+
 - 要禁用横幅：从两个 Jupyter Book 配置中的 `html_css_files`/`html_js_files` 中移除 `mq-thebe.css`/`mq-thebe.js`。
 - 要限制每个单元格的按钮：调整 `mq-thebe.js` 中（函数 `attachRunButtons`）的选择器逻辑，使其仅匹配您偏好的模式（例如，仅 `.cell` 或仅 `code.language-python`）。`.thebe-ignored` 内部的单元格会自动跳过。
 - 该脚本避免了私有的 Thebe 内部机制：它触发标准的启动按钮并点击单元格内置的 `.thebe-run-button`。这使其在 Thebe/Jupyter Book 更新时仍能保持弹性。

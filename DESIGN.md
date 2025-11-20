@@ -29,8 +29,9 @@ This repository hosts both the MindQuantum website (Astro) and the documentation
 
 ## Theming Strategy
 
-- Shared CSS variables in `src/styles/tokens.css` model brand color, typography, and spacing.
-- Build step (`scripts/prepare-tokens.mjs`) syncs tokens into `docs/_static/mq-variables.css` so Jupyter Book can use the same variables.
+- **Tailwind CSS Adoption**: The Astro site now uses Tailwind CSS (v4) for rapid, consistent UI development.
+- **Legacy Compatibility**: `src/styles/tokens.css` defines the core design tokens (colors, typography) as CSS variables. These are consumed by Tailwind (via `@theme`) and also copied to `docs/_static/mq-variables.css`.
+- **Unified Brand**: This dual approach ensures that the Jupyter Book/Sphinx documentation (which cannot easily use Tailwind) stays visually consistent with the Tailwind-styled landing pages.
 - `docs/_static/mq-theme.css` applies light overrides on top of `sphinx_book_theme` to reflect the brand without forking the upstream theme.
 
 This approach avoids maintaining a heavy bespoke Sphinx theme while still achieving visual parity and keeping upgrade paths simple.
@@ -51,4 +52,4 @@ This approach avoids maintaining a heavy bespoke Sphinx theme while still achiev
 ## Future Enhancements
 
 - Add versioned docs (e.g., by building multiple books into `public/docs/vX/`).
-- Replace the simple CSS stack with Tailwind + PostCSS in Astro if desired; tokens remain the source of truth.
+- Integrate search across both Astro and Sphinx content.

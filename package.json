@@ -19,8 +19,10 @@
     "sync:all": "python scripts/sync_all.py"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.17",
     "astro": "^5.14.5",
-    "quantum-circuit": "^0.9.241"
+    "quantum-circuit": "^0.9.241",
+    "tailwindcss": "^4.1.17"
   },
   "overrides": {
     "mathjs": "^7.5.1"

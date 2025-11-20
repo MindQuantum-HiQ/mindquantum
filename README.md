@@ -4,32 +4,32 @@ Astro + Jupyter Book monorepo for the MindQuantum website and bilingual document
 
 ## Overview
 
-- Astro powers the homepage and overall site shell.
+- Astro powers the homepage and overall site shell, styled with **Tailwind CSS** for a modern "Open Science" aesthetic.
 - Jupyter Book builds bilingual tutorials only (EN+ZH).
 - Jupyter Book also builds the self-contained course notebooks under `/courses`.
 - Sphinx builds the API reference as two projects (EN+ZH) using the internal `mqdocs` extension.
-- Shared design tokens keep visual consistency across both.
+- Shared design tokens keep visual consistency across both, bridging Tailwind and Sphinx themes.
 - GitHub Pages workflow builds and deploys both outputs together.
 
 ## Local Development
 
 Prerequisites: Node 18+ and Python 3.9+.
 
-1) Install Node deps
+1. Install Node deps
 
 ```bash
 npm install
 ```
 
-2) (Optional) Create a Python venv and install Jupyter Book
+2. (Optional) Create a Python venv and install Jupyter Book
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install jupyter-book sphinx-copybutton sphinx-design sphinx-thebe mindspore mindquantum
+pip install jupyter-book==1.0.4 sphinx-copybutton sphinx-design sphinx-thebe mindspore mindquantum
 ```
 
-3) Sync docs content (optional during dev)
+3. Sync docs content (optional during dev)
 
 The repo can auto-clone the upstream sources into a local cache on first run. To sync both tutorials and API docs:
 
@@ -39,13 +39,13 @@ npm run sync:all            # clone if missing, reuse cache if present
 python scripts/sync_all.py --update
 ```
 
-4) Build docs (tutorials + API)
+4. Build docs (tutorials + API)
 
 ```bash
 npm run build:docs   # auto-syncs upstreams, builds JB (tutorials) + Sphinx (API)
 ```
 
-5) Run the site
+5. Run the site
 
 ```bash
 npm run dev
@@ -95,7 +95,8 @@ The extension avoids monkey-patches and implements stable `mscnautosummary`/`ms*
 
 ## Theming
 
-- Shared CSS tokens live in `src/styles/tokens.css`.
+- **Tailwind CSS** (v4) is the primary styling engine for the Astro site.
+- Shared CSS tokens live in `src/styles/tokens.css` (mapped to Tailwind theme).
 - A small build step copies tokens to `docs/_static/mq-variables.css` so Jupyter Book can consume them.
 - Jupyter Book loads `mq-variables.css` and `mq-theme.css` to style pages in line with the homepage.
 
@@ -117,7 +118,6 @@ Tutorial pages are now Thebe-enabled so users can click Run on code cells direct
 - Scope: Execution is client-initiated; notebooks do not auto-execute. This keeps builds deterministic and scales better for traffic.
 - Environment: The Binder environment is configured and controlled by the repository https://github.com/MindQuantum-HiQ/mq-env.
 
-
 ### Enhanced UX additions
 
 - Per-cell Run button: Implemented in `docs/_static/mq-thebe.js` and styled by `docs/_static/mq-thebe.css`. It overlays a small “Run” button on Python code cells and notebook cells. On first click, it activates Thebe automatically and then runs the clicked cell.
@@ -126,6 +126,7 @@ Tutorial pages are now Thebe-enabled so users can click Run on code cells direct
 - Accessibility: Buttons include `aria-label`s; colors use shared tokens for contrast. The overlay avoids the copy button by default and falls back gracefully if Thebe isn’t available on a given page.
 
 Customization & maintenance:
+
 - To disable the banner: remove `mq-thebe.css`/`mq-thebe.js` from `html_css_files`/`html_js_files` in the two Jupyter Book configs.
 - To limit per-cell buttons: adjust the selector logic in `mq-thebe.js` (function `attachRunButtons`) to match only your preferred patterns (e.g., only `.cell` or only `code.language-python`). Cells inside `.thebe-ignored` are skipped automatically.
 - The script avoids private Thebe internals: it triggers the standard launch button and clicks the cell’s built-in `.thebe-run-button`. This keeps it resilient across Thebe/Jupyter Book updates.

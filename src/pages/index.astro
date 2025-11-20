@@ -1,14 +1,430 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import { DEFAULT_LANG } from "../config/i18n";
-import { HOME_MESSAGES } from "../locales/home";
-import HomePage from "../components/home/HomePage.astro";
-import PreferredLanguageRedirect from "../components/home/PreferredLanguageRedirect.astro";
-const lang = DEFAULT_LANG;
-const messages = HOME_MESSAGES[lang];
-const BASE = import.meta.env.BASE_URL || '/';
+import MainLayout from "../layouts/MainLayout.astro";
+import QuantumCircuitBuilder from "../components/QuantumCircuitBuilder.astro";
 ---
-<BaseLayout lang={lang} title="MindQuantum" description={messages.metaDescription}>
-  <PreferredLanguageRedirect defaultLang={lang} baseUrl={BASE} />
-  <HomePage lang={lang} messages={messages} baseUrl={BASE} />
-</BaseLayout>
+
+<MainLayout title="MindQuantum">
+  <!-- Technical Hero: Two Column Layout -->
+  <main class="border-b border-stone-200 bg-stone-50/50">
+    <div
+      class="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 min-h-[600px]"
+    >
+      <!-- Left: Project Definition & Quick Actions -->
+      <div
+        class="lg:col-span-5 p-12 lg:p-20 flex flex-col justify-center border-r border-stone-200 bg-white"
+      >
+        <div class="space-y-8">
+          <div class="space-y-2">
+            <div
+              class="inline-flex items-center gap-2 px-2 py-1 rounded bg-blue-50 text-blue-700 text-xs font-mono border border-blue-100 w-fit"
+            >
+              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+              v0.11.0 Stable
+            </div>
+            <h1
+              class="text-5xl font-semibold tracking-tight text-stone-900 leading-tight"
+            >
+              MindQuantum
+            </h1>
+            <p class="text-lg text-stone-500 leading-relaxed">
+              A general-purpose, open-source framework for quantum-classical
+              hybrid computing. Designed for research, simulation, and
+              deployment.
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-4">
+            <div
+              class="bg-stone-100 p-4 rounded border border-stone-200 font-mono text-sm text-stone-600 flex justify-between items-center group cursor-pointer hover:border-stone-300 transition-colors"
+            >
+              <span>pip install mindquantum</span>
+              <svg
+                class="w-4 h-4 text-stone-400 group-hover:text-stone-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                ><path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                ></path></svg
+              >
+            </div>
+            <div class="flex gap-3">
+              <a
+                href="/docs/en"
+                class="px-5 py-2.5 bg-stone-900 text-white text-sm font-medium rounded hover:bg-stone-800 transition-colors text-center"
+              >
+                Documentation
+              </a>
+              <a
+                href="https://gitee.com/mindspore/mindquantum"
+                class="px-5 py-2.5 bg-white border border-stone-200 text-stone-700 text-sm font-medium rounded hover:bg-stone-50 transition-colors text-center flex items-center gap-2"
+              >
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"
+                  ><path
+                    d="M11.984 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0 .016 0zm6.09 5.333c.328 0 .593.266.592.593v1.482a.594.594 0 0 1-.225.472.181.181 0 0 1-.02.014l-.032.019a18.435 18.435 0 0 0-1.4.876c-.525.381-1.08.87-1.636 1.42-1.111 1.113-2.13 2.68-3.005 4.684a18.42 18.42 0 0 1-1.86 3.998c-.28.503-.586.98-.913 1.428a.181.181 0 0 1-.019.02.594.594 0 0 1-.472.225h-1.48a.596.596 0 0 1-.593-.592c0-.071.015-.139.04-.201.244-1.46.907-2.96 1.88-4.166.974-1.205 2.244-2.027 3.595-2.36a.186.186 0 0 1 .03-.004c.015 0 .028.005.04.013.086.06.167.122.244.188.17.147.326.305.468.473a.189.189 0 0 1 .013.04c.004.01 0 .019-.003.026-.272.754-.362 1.63-.243 2.65.243-1.59 1.082-3.138 2.432-4.488 1.35-1.35 2.9-2.19 4.49-2.432a3.91 3.91 0 0 1-.266 1.274c-.005.01-.009.02-.013.03a.186.186 0 0 1-.039.012c-.168.015-.326.04-.473.074a2.87 2.87 0 0 0-.188.046c-.008.002-.013.015-.013.029a.186.186 0 0 1-.004.03c-.333 1.35-1.155 2.62-2.36 3.594-1.206.973-2.706 1.636-4.166 1.88-.063.025-.13.04-.201.04a.596.596 0 0 1-.592-.593V5.926c0-.327.266-.593.593-.593h1.482z"
+                  ></path></svg
+                >
+                Source
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Circuit Playground / Technical Demo -->
+      <div
+        class="lg:col-span-7 bg-stone-50 relative overflow-hidden flex flex-col"
+      >
+        <!-- Background Grid -->
+        <div
+          class="absolute inset-0"
+          style="background-image: radial-gradient(#e5e5e5 1px, transparent 1px); background-size: 20px 20px;"
+        >
+        </div>
+
+        <div class="relative z-10 p-12 h-full flex flex-col justify-center">
+          <div
+            class="bg-white rounded-lg shadow-sm border border-stone-200 overflow-hidden"
+          >
+            <div
+              class="bg-stone-50 border-b border-stone-200 px-4 py-2 flex items-center justify-between"
+            >
+              <div class="text-xs font-mono text-stone-500">
+                Interactive Environment
+              </div>
+              <div class="flex gap-1.5">
+                <div class="w-2.5 h-2.5 rounded-full bg-stone-300"></div>
+                <div class="w-2.5 h-2.5 rounded-full bg-stone-300"></div>
+              </div>
+            </div>
+            <div class="p-6">
+              <!-- Embedded Circuit Builder without the large heading -->
+              <QuantumCircuitBuilder lang="en" heading="" />
+            </div>
+          </div>
+          <p class="mt-6 text-sm text-stone-500 text-center font-mono">
+            Drag and drop gates to build your circuit • Instant simulation
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Key Features / Architecture Grid -->
+  <section class="border-b border-stone-200 bg-white">
+    <div
+      class="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-stone-200"
+    >
+      <!-- Card 1 -->
+      <div class="p-12 group hover:bg-stone-50 transition-colors">
+        <div
+          class="mb-6 w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center border border-blue-100"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
+            ></path></svg
+          >
+        </div>
+        <h3 class="text-lg font-semibold text-stone-900 mb-3">
+          Hybrid Quantum-Classical
+        </h3>
+        <p class="text-stone-600 leading-relaxed text-sm">
+          Built on MindSpore's auto-differentiation engine, enabling seamless
+          training of parameterized quantum circuits (PQC) and quantum neural
+          networks.
+        </p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="p-12 group hover:bg-stone-50 transition-colors">
+        <div
+          class="mb-6 w-10 h-10 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center border border-purple-100"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg
+          >
+        </div>
+        <h3 class="text-lg font-semibold text-stone-900 mb-3">
+          High-Performance Simulation
+        </h3>
+        <p class="text-stone-600 leading-relaxed text-sm">
+          Supports single-qubit gate, double-qubit gate and general unitary gate
+          operations. Optimized for CPU/GPU backends with vectorization support.
+        </p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="p-12 group hover:bg-stone-50 transition-colors">
+        <div
+          class="mb-6 w-10 h-10 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center border border-emerald-100"
+        >
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"
+            ></path></svg
+          >
+        </div>
+        <h3 class="text-lg font-semibold text-stone-900 mb-3">
+          Rich Algorithm Library
+        </h3>
+        <p class="text-stone-600 leading-relaxed text-sm">
+          Integrated implementations of VQE, QAOA, Grover Search, and Quantum
+          Phase Estimation. Ready to use for chemistry and combinatorial
+          optimization.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Documentation / Learning Path -->
+  <section class="py-20 bg-stone-50">
+    <div class="max-w-[1440px] mx-auto px-6 lg:px-12">
+      <div class="flex flex-col md:flex-row justify-between items-end mb-12">
+        <div>
+          <h2 class="text-2xl font-semibold text-stone-900 mb-2">
+            Learning Path
+          </h2>
+          <p class="text-stone-500">
+            Systematic tutorials to master quantum computing.
+          </p>
+        </div>
+        <a
+          href="/courses"
+          class="text-blue-600 hover:text-blue-800 text-sm font-medium flex items-center gap-1 mt-4 md:mt-0"
+        >
+          View all courses <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg
+          >
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Course 1 -->
+        <a
+          href="/courses/01.Qubits.html"
+          class="block p-6 bg-white rounded border border-stone-200 hover:border-blue-300 hover:shadow-md transition-all"
+        >
+          <span class="text-xs font-mono text-stone-400 mb-2 block">01</span>
+          <h4 class="font-medium text-stone-900 mb-2">
+            Qubits & Superposition
+          </h4>
+          <p class="text-sm text-stone-500 line-clamp-2">
+            Introduction to the fundamental unit of quantum information and the
+            Bloch sphere representation.
+          </p>
+        </a>
+
+        <!-- Course 2 -->
+        <a
+          href="/courses/03.Quantum-Gates.html"
+          class="block p-6 bg-white rounded border border-stone-200 hover:border-blue-300 hover:shadow-md transition-all"
+        >
+          <span class="text-xs font-mono text-stone-400 mb-2 block">02</span>
+          <h4 class="font-medium text-stone-900 mb-2">Quantum Gates</h4>
+          <p class="text-sm text-stone-500 line-clamp-2">
+            Understanding Pauli gates, Hadamard, and rotational operators.
+          </p>
+        </a>
+
+        <!-- Course 3 -->
+        <a
+          href="/courses/10.Quantum-Teleportation.html"
+          class="block p-6 bg-white rounded border border-stone-200 hover:border-blue-300 hover:shadow-md transition-all"
+        >
+          <span class="text-xs font-mono text-stone-400 mb-2 block">03</span>
+          <h4 class="font-medium text-stone-900 mb-2">Quantum Teleportation</h4>
+          <p class="text-sm text-stone-500 line-clamp-2">
+            Transmitting quantum information using entanglement and classical
+            communication.
+          </p>
+        </a>
+
+        <!-- Course 4 -->
+        <a
+          href="/courses/18.Deutsch-Algorithm.html"
+          class="block p-6 bg-white rounded border border-stone-200 hover:border-blue-300 hover:shadow-md transition-all"
+        >
+          <span class="text-xs font-mono text-stone-400 mb-2 block">04</span>
+          <h4 class="font-medium text-stone-900 mb-2">Deutsch Algorithm</h4>
+          <p class="text-sm text-stone-500 line-clamp-2">
+            Demonstrating quantum speedup over classical algorithms.
+          </p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Code Example: Minimalist & Functional -->
+  <section class="py-20 border-t border-stone-200 bg-white">
+    <div
+      class="max-w-[1440px] mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-2 gap-16"
+    >
+      <div>
+        <h2 class="text-2xl font-semibold text-stone-900 mb-6">
+          Python-Native Syntax
+        </h2>
+        <div class="space-y-6 text-stone-600">
+          <p>
+            MindQuantum is designed to be expressive and concise. Construct
+            circuits using operator overloading and execute them on
+            high-performance simulators with just a few lines of code.
+          </p>
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <svg
+                class="w-5 h-5 text-green-500 mt-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                ><path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"></path></svg
+              >
+              <span
+                ><strong>Vectorized Operations:</strong> Efficiently handle batches
+                of quantum states.</span
+              >
+            </li>
+            <li class="flex items-start gap-3">
+              <svg
+                class="w-5 h-5 text-green-500 mt-0.5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                ><path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"></path></svg
+              >
+              <span
+                ><strong>Auto-Differentiation:</strong> Calculate gradients of expectation
+                values automatically for Variational Quantum Algorithms.</span
+              >
+            </li>
+          </ul>
+          <div class="pt-6">
+            <a
+              href="/docs/en"
+              class="text-stone-900 font-medium hover:underline"
+              >Read the API Reference &rarr;</a
+            >
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bg-stone-900 rounded-lg p-6 shadow-xl overflow-hidden font-mono text-sm"
+      >
+        <div
+          class="flex justify-between items-center mb-4 pb-4 border-b border-stone-800"
+        >
+          <span class="text-stone-400">main.py</span>
+          <div class="flex gap-2">
+            <span class="w-3 h-3 rounded-full bg-stone-700"></span>
+            <span class="w-3 h-3 rounded-full bg-stone-700"></span>
+          </div>
+        </div>
+        <div class="text-stone-300 space-y-1">
+          <div class="flex">
+            <span class="text-stone-500 w-6 select-none">1</span>
+            <span class="text-purple-400">import</span
+            >&nbsp;mindquantum&nbsp;<span class="text-purple-400">as</span
+            >&nbsp;mq
+          </div>
+          <div class="flex">
+            <span class="text-stone-500 w-6 select-none">2</span>
+            <span class="text-purple-400">from</span
+            >&nbsp;mindquantum&nbsp;<span class="text-purple-400">import</span
+            >&nbsp;Circuit, H, RX, RY
+          </div>
+          <div class="flex">
+            <span class="text-stone-500 w-6 select-none">3</span>
+          </div>
+          <div class="flex">
+            <span class="text-stone-500 w-6 select-none">4</span>
+            <span class="text-stone-500"
+              ># Construct a parameterized circuit</span
+            >
+          </div>
+          <div class="flex">
+            <span class="text-stone-500 w-6 select-none">5</span> circ = Circuit()
+          </div>
+          <div class="flex">
+            <span class="text-stone-500 w-6 select-none">6</span> circ += H.on(0)
+          </div>
+          <div class="flex">
+            <span class="text-stone-500 w-6 select-none">7</span> circ += RX(<span
+              class="text-green-400">'theta'</span
+            >).on(0)
+          </div>
+          <div class="flex">
+            <span class="text-stone-500 w-6 select-none">8</span> circ += RY(1.2).on(1,
+            0)
+          </div>
+          <div class="flex">
+            <span class="text-stone-500 w-6 select-none">9</span>
+          </div>
+          <div class="flex">
+            <span class="text-stone-500 w-6 select-none">10</span>
+            <span class="text-stone-500"># Simulate</span>
+          </div>
+          <div class="flex">
+            <span class="text-stone-500 w-6 select-none">11</span> sim = mq.Simulator(<span
+              class="text-green-400">'mqvector'</span
+            >, 2)
+          </div>
+          <div class="flex">
+            <span class="text-stone-500 w-6 select-none">12</span> ham = mq.Hamiltonian(mq.QubitOperator(<span
+              class="text-green-400">'Z0'</span
+            >))
+          </div>
+          <div class="flex">
+            <span class="text-stone-500 w-6 select-none">13</span> result = sim.get_expectation_with_grad(ham,
+            circ)
+          </div>
+          <div class="flex">
+            <span class="text-stone-500 w-6 select-none">14</span>
+            <span class="text-blue-400">print</span>(result)
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</MainLayout>
