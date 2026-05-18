@@ -135,33 +135,43 @@ function isActive(itemHref: string, currentPath: string) {
         const active = isActive(item.href, Astro.url.pathname);
         const menuId = `nav-menu-${item.id}`;
         const triggerId = `nav-trigger-${item.id}`;
-        const commonClasses = [
-          "mq-focus-ring relative px-2 lg:px-3 py-2 text-sm font-medium transition-colors inline-flex items-center gap-1 rounded-md",
+        const linkClasses = [
+          "mq-focus-ring relative px-2 lg:px-3 py-2 text-sm font-medium transition-colors inline-flex items-center rounded-md",
+          hasDropdown ? "pr-1 lg:pr-1" : "",
           active
-            ? "text-primary after:absolute after:bottom-0 after:left-2 lg:after:left-3 after:right-2 lg:after:right-3 after:h-[2px] after:bg-primary"
-            : "text-foreground hover:text-primary",
+            ? hasDropdown
+              ? "text-primary after:absolute after:bottom-0 after:left-2 lg:after:left-3 after:right-1 after:h-[2px] after:bg-primary"
+              : "text-primary after:absolute after:bottom-0 after:left-2 lg:after:left-3 after:right-2 lg:after:right-3 after:h-[2px] after:bg-primary"
+            : "text-foreground hover:text-primary group-hover:text-primary",
         ];
         return (
-          <div class="nav-group relative" data-nav-group>
-            {hasDropdown ? (
+          <div class="nav-group group relative inline-flex items-center" data-nav-group>
+            <a
+              href={item.href}
+              id={hasDropdown ? undefined : triggerId}
+              class:list={linkClasses}
+              data-nav-link={hasDropdown ? "" : undefined}
+            >
+              {item.label}
+            </a>
+            {hasDropdown && (
               <button
                 type="button"
                 id={triggerId}
                 aria-haspopup="menu"
                 aria-expanded="false"
                 aria-controls={menuId}
+                aria-label={`${item.label} menu`}
                 data-nav-trigger
-                class:list={commonClasses}
+                class:list={[
+                  "mq-focus-ring inline-flex items-center justify-center w-6 h-8 mr-1 lg:mr-2 rounded-md transition-colors",
+                  active ? "text-primary" : "text-foreground hover:text-primary group-hover:text-primary",
+                ]}
               >
-                {item.label}
                 <svg aria-hidden="true" class="w-3 h-3 opacity-70 transition-transform nav-chevron" viewBox="0 0 24 24">
                   <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m6 9l6 6l6-6" />
                 </svg>
               </button>
-            ) : (
-              <a href={item.href} class:list={commonClasses}>
-                {item.label}
-              </a>
             )}
 
             {item.children && (
@@ -323,19 +333,28 @@ function isActive(itemHref: string, currentPath: string) {
         }
         return (
           <div class="mobile-accordion" data-mobile-accordion>
-            <button
-              type="button"
-              id={triggerId}
-              aria-expanded="false"
-              aria-controls={panelId}
-              class="mq-focus-ring flex items-center justify-between w-full min-h-[48px] px-3 py-3 text-base font-medium text-foreground hover:bg-secondary rounded-md"
-              data-mobile-accordion-trigger
-            >
-              <span>{item.label}</span>
-              <svg aria-hidden="true" class="w-4 h-4 opacity-70 transition-transform mobile-accordion-chevron" viewBox="0 0 24 24">
-                <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m6 9l6 6l6-6" />
-              </svg>
-            </button>
+            <div class="flex items-stretch rounded-md hover:bg-secondary">
+              <a
+                href={item.href}
+                class="mq-focus-ring flex-1 flex items-center min-h-[48px] px-3 py-3 text-base font-medium text-foreground rounded-md"
+                data-mobile-link
+              >
+                {item.label}
+              </a>
+              <button
+                type="button"
+                id={triggerId}
+                aria-expanded="false"
+                aria-controls={panelId}
+                aria-label={`Toggle ${item.label} submenu`}
+                class="mq-focus-ring flex items-center justify-center w-12 min-h-[48px] text-foreground rounded-md"
+                data-mobile-accordion-trigger
+              >
+                <svg aria-hidden="true" class="w-4 h-4 opacity-70 transition-transform mobile-accordion-chevron" viewBox="0 0 24 24">
+                  <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m6 9l6 6l6-6" />
+                </svg>
+              </button>
+            </div>
             <div id={panelId} role="region" aria-labelledby={triggerId} class="hidden pl-3 border-l border-border ml-3 my-1 space-y-0.5">
               {/* Overview row */}
               <a
@@ -447,6 +466,22 @@ function isActive(itemHref: string, currentPath: string) {
       trigger.addEventListener("keydown", (e) => {
         const key = (e as KeyboardEvent).key;
         if (key === "ArrowDown" || key === "Enter" || key === " ") {
+          e.preventDefault();
+          openGroup(group);
+          const firstItem = group.querySelector("[data-nav-menuitem]") as HTMLElement | null;
+          firstItem?.focus();
+        } else if (key === "Escape") {
+          closeGroup(group);
+        }
+      });
+
+      // Sibling link (parent-page anchor) inside a dropdown group: clicking
+      // navigates as a normal link, but ArrowDown should open the menu so
+      // keyboard users can reach submenu items without leaving the page.
+      const link = group.querySelector("[data-nav-link]") as HTMLElement | null;
+      link?.addEventListener("keydown", (e) => {
+        const key = (e as KeyboardEvent).key;
+        if (key === "ArrowDown") {
           e.preventDefault();
           openGroup(group);
           const firstItem = group.querySelector("[data-nav-menuitem]") as HTMLElement | null;
