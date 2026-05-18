@@ -57,9 +57,39 @@ const abs = (href: string) => (Astro.site ? new URL(href, Astro.site).toString()
       return rel === 'index.html' ? '' : rel;
     }
 
+    /* `pendingNavRel` is the rel we *asked* the iframe to load.
+       The iframe is rendered with an HTML-declared `src` (the API root
+       index), so by the time this script runs, the iframe is already
+       fetching that initial URL. When the user lands here via a deep-link
+       hash, we immediately change `iframe.src` to the requested target,
+       but the initial load can still fire its `load` event after ours
+       attaches the listener. That stale event would otherwise push the
+       wrong hash (`#/` for the index page) to the parent URL, clobbering
+       the user's deep-link.
+
+       We resolve this by computing the expected target *synchronously*
+       (before the listener is attached) and ignoring any `load` whose
+       resolved rel doesn't match. The matching load arrives later and is
+       processed normally. Once it's been seen, `pendingNavRel` is reset to
+       `null` so subsequent in-iframe navigations (e.g. the user clicking a
+       Sphinx sidebar link) keep flowing through to the parent hash. */
+    function computeInitialRel() {
+      const h = location.hash || '';
+      if (!h.startsWith('#/')) return DEFAULT_REL;
+      const CUR_PREFIX = (document.documentElement.lang === 'en') ? 'api_python_en/' : 'api_python/';
+      const ALT_PREFIX = (CUR_PREFIX === 'api_python_en/') ? 'api_python/' : 'api_python_en/';
+      const relRaw = decodeURI(h.slice(2));
+      const rel = relRaw.startsWith(ALT_PREFIX)
+        ? CUR_PREFIX + relRaw.slice(ALT_PREFIX.length)
+        : (relRaw || DEFAULT_REL);
+      return rel;
+    }
+
     let suppressHashHandler = false;
+    let pendingNavRel = normalizeRel(computeInitialRel());
 
     function navigateIframeTo(rel, replace=false) {
+      pendingNavRel = normalizeRel(rel || DEFAULT_REL);
       const url = joinUrl(ROOT, rel || DEFAULT_REL);
       if (replace) iframe.setAttribute('src', url);
       else iframe.src = url;
@@ -73,6 +103,10 @@ const abs = (href: string) => (Astro.site ? new URL(href, Astro.site).toString()
         const rel = relFromPathname(childPath, ROOT);
         if (rel === null) return;
         const next = normalizeRel(rel);
+        if (pendingNavRel !== null && next !== pendingNavRel) {
+          return;
+        }
+        pendingNavRel = null;
         const desiredHash = '#/' + encodeURI(next);
         if (location.hash !== desiredHash) {
           suppressHashHandler = true;
