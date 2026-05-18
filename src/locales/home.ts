@@ -15,19 +15,11 @@ export type LearningCard = {
   href: string;
 };
 
-export type HeroSlide = {
-  eyebrow?: string;
-  title: string;
-  subtitle: string;
-  background: "quantum" | "internship" | "meeting";
-  tone: "light" | "dark";
-  actions: Array<{
-    label: string;
-    variant: "primary" | "outline";
-    href: string;
-    icon?: "play";
-    external?: boolean;
-  }>;
+export type AnnouncementItem = {
+  id: string;
+  text: string;
+  cta: string;
+  href: string;
 };
 
 export type ArchitectureParadigm = {
@@ -58,11 +50,7 @@ export type ArchitectureLayer = {
 
 export type HomeMessages = {
   metaDescription: string;
-  announcement: {
-    text: string;
-    cta: string;
-    href: string;
-  };
+  announcements: AnnouncementItem[];
   framework: {
     release: string;
     releaseHref: string;
@@ -77,12 +65,19 @@ export type HomeMessages = {
     layers: ArchitectureLayer[];
   };
   hero: {
-    // Legacy fields (kept for backwards compatibility)
-    title: string;
-    subtitle: string;
-    startLabel: string;
-    repoLabel: string;
-    slides: HeroSlide[];
+    eyebrow?: string;
+    headline: string;
+    description: string;
+    ctaLabel: string;
+    ctaHref: string;
+    proofTitle: string;
+    proofLang: string;
+    proofCode: string;
+    proofAriaLabel: string;
+    runInComposerLabel: string;
+    runInComposerHref: string;
+    mirrorsLabel: string;
+    opensInNewTab: string;
   };
   features: {
     heading: string;
@@ -186,11 +181,14 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
   en: {
     metaDescription:
       "Open-source Python framework for parameterized quantum circuits. CPU, GPU, and Ascend backends. Auto-differentiation via MindSpore, with VQE, QAOA, and Grover built in.",
-    announcement: {
-      text: "Drag quantum gates into a live circuit — no install required.",
-      cta: "Open Composer",
-      href: "/composer/",
-    },
+    announcements: [
+      {
+        id: "composer",
+        text: "Drag quantum gates into a live circuit — no install required.",
+        cta: "Open Composer",
+        href: "/composer/",
+      },
+    ],
     framework: {
       release: "MindSpore Quantum V0.11 released",
       releaseHref: "/documentation/",
@@ -252,68 +250,31 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
       ],
     },
     hero: {
-      title: "MindQuantum",
-      subtitle:
-        "Build and simulate quantum circuits with performance, clarity, and delightful docs.",
-      startLabel: "Start Learning",
-      repoLabel: "Source Code",
-      slides: [
-        {
-          title: "MindSpore Quantum",
-          subtitle:
-            "Python framework for parameterized quantum circuits. CPU, GPU, and Ascend backends. Auto-differentiation via MindSpore.",
-          background: "quantum",
-          tone: "light",
-          actions: [
-            {
-              label: "AtomGit",
-              variant: "primary",
-              href: "https://atomgit.com/mindspore/mindquantum",
-              external: true,
-            },
-            {
-              label: "GitHub",
-              variant: "outline",
-              href: "https://github.com/mindspore-ai/mindquantum",
-              external: true,
-            },
-            {
-              label: "Gitee",
-              variant: "outline",
-              href: "https://gitee.com/mindspore/mindquantum",
-              external: true,
-            },
-          ],
-        },
-        {
-          eyebrow: "Internship",
-          title: "Online Open-Source Internship Tasks",
-          subtitle:
-            "Join the MindSpore Quantum community and contribute to real open-source quantum computing projects.",
-          background: "internship",
-          tone: "light",
-          actions: [
-            { label: "Learn More", variant: "primary", href: "/community/" },
-            { label: "Task List", variant: "outline", href: "/community/" },
-          ],
-        },
-        {
-          eyebrow: "Community",
-          title: "Quantum Computing Group Meeting",
-          subtitle: "Live Every Monday 10 AM on Koushare and Bilibili",
-          background: "meeting",
-          tone: "dark",
-          actions: [
-            {
-              label: "View Video",
-              variant: "primary",
-              href: "https://www.bilibili.com/",
-              icon: "play",
-              external: true,
-            },
-          ],
-        },
-      ],
+      eyebrow: "Open source · MindSpore ecosystem",
+      headline: "Quantum circuits, differentiated end\u2011to\u2011end",
+      description:
+        "Python framework for parameterized quantum circuits. CPU, GPU, and Ascend backends. Auto-differentiation via MindSpore.",
+      ctaLabel: "Try in the browser",
+      ctaHref: "/composer/",
+      proofTitle: "bell_state.py",
+      proofLang: "python",
+      proofCode:
+        "from mindquantum.core.circuit import Circuit\n" +
+        "from mindquantum.core.gates import H, X\n" +
+        "from mindquantum.simulator import Simulator\n" +
+        "\n" +
+        "# Prepare a Bell state |\u03a6\u207a\u27e9\n" +
+        "circ = Circuit([H.on(0), X.on(1, 0)])\n" +
+        "sim = Simulator('mqvector', 2)\n" +
+        "sim.apply_circuit(circ)\n" +
+        "\n" +
+        "print(sim.get_qs())\n" +
+        "# array([0.707+0.j, 0.+0.j, 0.+0.j, 0.707+0.j])",
+      proofAriaLabel: "Sample MindQuantum code — prepare a Bell state in Python",
+      runInComposerLabel: "Open in Composer",
+      runInComposerHref: "/composer/",
+      mirrorsLabel: "Source",
+      opensInNewTab: "(opens in new tab)",
     },
     features: {
       heading: "Features",
@@ -419,11 +380,14 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
   zh: {
     metaDescription:
       "开源 Python 量子框架。支持参数化量子电路与量子-经典混合算法，可在 CPU、GPU 与昇腾上运行，通过 MindSpore 实现自动微分，内置 VQE、QAOA 与 Grover。",
-    announcement: {
-      text: "在浏览器里拖放量子门，构建电路——无需安装。",
-      cta: "打开 Composer",
-      href: "/zh/composer/",
-    },
+    announcements: [
+      {
+        id: "composer",
+        text: "在浏览器里拖放量子门，构建电路——无需安装。",
+        cta: "打开 Composer",
+        href: "/zh/composer/",
+      },
+    ],
     framework: {
       release: "MindSpore Quantum V0.11 发布",
       releaseHref: "/zh/documentation/",
@@ -481,67 +445,31 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
       ],
     },
     hero: {
-      title: "MindQuantum",
-      subtitle: "高性能、清晰易用的量子电路构建与模拟。",
-      startLabel: "开始学习",
-      repoLabel: "查看源码",
-      slides: [
-        {
-          title: "MindSpore Quantum",
-          subtitle:
-            "基于 Python 的参数化量子电路框架，可运行于 CPU、GPU 与昇腾，通过 MindSpore 实现自动微分。",
-          background: "quantum",
-          tone: "light",
-          actions: [
-            {
-              label: "AtomGit",
-              variant: "primary",
-              href: "https://atomgit.com/mindspore/mindquantum",
-              external: true,
-            },
-            {
-              label: "GitHub",
-              variant: "outline",
-              href: "https://github.com/mindspore-ai/mindquantum",
-              external: true,
-            },
-            {
-              label: "Gitee",
-              variant: "outline",
-              href: "https://gitee.com/mindspore/mindquantum",
-              external: true,
-            },
-          ],
-        },
-        {
-          eyebrow: "实习",
-          title: "在线开源实习任务",
-          subtitle:
-            "加入 MindSpore Quantum 社区，为真实的开源量子计算项目贡献力量。",
-          background: "internship",
-          tone: "light",
-          actions: [
-            { label: "了解更多", variant: "primary", href: "/zh/community/" },
-            { label: "任务列表", variant: "outline", href: "/zh/community/" },
-          ],
-        },
-        {
-          eyebrow: "社区",
-          title: "量子计算组会",
-          subtitle: "每周一上午 10 点在蔻享和哔哩哔哩直播",
-          background: "meeting",
-          tone: "dark",
-          actions: [
-            {
-              label: "观看视频",
-              variant: "primary",
-              href: "https://www.bilibili.com/",
-              icon: "play",
-              external: true,
-            },
-          ],
-        },
-      ],
+      eyebrow: "开源 · MindSpore 生态",
+      headline: "端到端可微分的量子电路",
+      description:
+        "基于 Python 的参数化量子电路框架，可运行于 CPU、GPU 与昇腾，通过 MindSpore 实现自动微分。",
+      ctaLabel: "在浏览器中试用",
+      ctaHref: "/zh/composer/",
+      proofTitle: "bell_state.py",
+      proofLang: "python",
+      proofCode:
+        "from mindquantum.core.circuit import Circuit\n" +
+        "from mindquantum.core.gates import H, X\n" +
+        "from mindquantum.simulator import Simulator\n" +
+        "\n" +
+        "# 准备 Bell 态 |\u03a6\u207a\u27e9\n" +
+        "circ = Circuit([H.on(0), X.on(1, 0)])\n" +
+        "sim = Simulator('mqvector', 2)\n" +
+        "sim.apply_circuit(circ)\n" +
+        "\n" +
+        "print(sim.get_qs())\n" +
+        "# array([0.707+0.j, 0.+0.j, 0.+0.j, 0.707+0.j])",
+      proofAriaLabel: "MindQuantum 示例代码：用 Python 准备 Bell 态",
+      runInComposerLabel: "在 Composer 中打开",
+      runInComposerHref: "/zh/composer/",
+      mirrorsLabel: "源代码",
+      opensInNewTab: "（在新标签页打开）",
     },
     features: {
       heading: "核心特性",

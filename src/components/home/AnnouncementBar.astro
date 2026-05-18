@@ -1,29 +1,120 @@
 ---
+/*
+ * AnnouncementBar — renders one or more announcements as a single bar.
+ * When there is exactly one item it renders as a plain announcement
+ * (no nav chrome). With two or more it adds manual prev/next controls
+ * and a positional counter. No autoplay; the user advances at their
+ * own pace.
+ */
 import type { HomeMessages } from "../../locales/home";
 import { withBase } from "../../config/urls";
 
 interface Props {
-  announcement: HomeMessages["announcement"];
+  announcements: HomeMessages["announcements"];
 }
 
-const { announcement } = Astro.props as Props;
+const { announcements } = Astro.props as Props;
 const BASE = import.meta.env.BASE_URL || "/";
-const href = /^https?:\/\//.test(announcement.href)
-  ? announcement.href
-  : withBase(announcement.href, BASE);
+
+const items = announcements.map((item) => ({
+  ...item,
+  href: /^https?:\/\//.test(item.href) ? item.href : withBase(item.href, BASE),
+}));
+
+const hasMultiple = items.length > 1;
 ---
 
-<section class="mq-container my-8">
-  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-xl border border-border bg-background px-6 py-4 shadow-sm">
-    <div class="flex items-center gap-3">
-      <svg aria-hidden="true" class="w-5 h-5 text-muted-foreground shrink-0" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M14 8v8l5 4V4l-5 4Zm-2 10H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h7v12Z" />
-      </svg>
-      <span class="text-sm text-foreground">{announcement.text}</span>
+{items.length > 0 && (
+  <section class="mq-container my-8" aria-label="Announcements">
+    <div
+      class="flex items-center gap-4 rounded-xl border border-border bg-background px-6 py-4 shadow-sm"
+      data-announcement-bar={hasMultiple ? "true" : undefined}
+    >
+      <div class="flex-1 min-w-0">
+        {items.map((item, idx) => (
+          <div
+            class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4"
+            data-announcement-item
+            hidden={idx !== 0}
+          >
+            <div class="flex items-center gap-3 min-w-0">
+              <svg aria-hidden="true" class="w-5 h-5 text-muted-foreground shrink-0" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M14 8v8l5 4V4l-5 4Zm-2 10H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h7v12Z" />
+              </svg>
+              <span class="text-sm text-foreground truncate">{item.text}</span>
+            </div>
+            <a href={item.href} class="mq-btn-outline shrink-0">
+              <span>{item.cta}</span>
+              <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24">
+                <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6l6 6l-6 6" />
+              </svg>
+            </a>
+          </div>
+        ))}
+      </div>
+
+      {hasMultiple && (
+        <nav
+          class="flex items-center gap-1 shrink-0 pl-2 border-l border-border"
+          aria-label="Announcement navigation"
+        >
+          <button
+            type="button"
+            data-announcement-prev
+            aria-label="Previous announcement"
+            class="mq-focus-ring w-8 h-8 rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors flex items-center justify-center"
+          >
+            <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24">
+              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m15 18l-6-6l6-6" />
+            </svg>
+          </button>
+          <span
+            class="text-xs text-muted-foreground font-mono tabular-nums min-w-10 text-center"
+            data-announcement-counter
+            aria-live="polite"
+          >
+            {`1/${items.length}`}
+          </span>
+          <button
+            type="button"
+            data-announcement-next
+            aria-label="Next announcement"
+            class="mq-focus-ring w-8 h-8 rounded-md text-muted-foreground hover:bg-secondary hover:text-foreground transition-colors flex items-center justify-center"
+          >
+            <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24">
+              <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m9 18l6-6l-6-6" />
+            </svg>
+          </button>
+        </nav>
+      )}
     </div>
-    <a href={href} class="mq-btn-outline">
-      {announcement.cta}
-      <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6l6 6l-6 6" /></svg>
-    </a>
-  </div>
-</section>
+  </section>
+)}
+
+<script>
+  (function () {
+    document.querySelectorAll<HTMLElement>("[data-announcement-bar]").forEach((bar) => {
+      const items = Array.from(bar.querySelectorAll<HTMLElement>("[data-announcement-item]"));
+      const counter = bar.querySelector<HTMLElement>("[data-announcement-counter]");
+      const prev = bar.querySelector<HTMLButtonElement>("[data-announcement-prev]");
+      const next = bar.querySelector<HTMLButtonElement>("[data-announcement-next]");
+      if (items.length < 2) return;
+
+      let index = 0;
+      function show(i: number) {
+        index = (i + items.length) % items.length;
+        items.forEach((el, j) => {
+          if (j === index) {
+            el.removeAttribute("hidden");
+          } else {
+            el.setAttribute("hidden", "");
+          }
+        });
+        if (counter) counter.textContent = `${index + 1}/${items.length}`;
+      }
+      prev?.addEventListener("click", () => show(index - 1));
+      next?.addEventListener("click", () => show(index + 1));
+      show(0);
+    });
+  })();
+</script>

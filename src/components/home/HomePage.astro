@@ -19,8 +19,8 @@ interface Props {
 const { messages } = Astro.props as Props;
 ---
 
-<HeroCarousel slides={messages.hero.slides} />
-<AnnouncementBar announcement={messages.announcement} />
+<HeroCarousel hero={messages.hero} framework={messages.framework} />
+<AnnouncementBar announcements={messages.announcements} />
 <FrameworkIntro architecture={messages.architecture} framework={messages.framework} />
 <Features features={messages.features} />
 <Research research={messages.research} />

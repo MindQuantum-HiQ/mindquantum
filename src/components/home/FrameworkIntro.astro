@@ -192,6 +192,9 @@ function resolveHref(href: string): string {
 <script>
   (function () {
     document.querySelectorAll<HTMLButtonElement>("[data-install-copy]").forEach((button) => {
+      if (button.dataset.copyBound === "true") return;
+      button.dataset.copyBound = "true";
+
       const text = button.getAttribute("data-copy-text") || "";
       const copiedLabel = button.getAttribute("data-copied-label") || "Copied";
       const manualLabel =

@@ -1,290 +1,217 @@
 ---
-import { Image } from "astro:assets";
-import heroQuantum from "../../assets/home/hero-bg-quantum.jpg";
-import heroInternship from "../../assets/home/hero-bg-internship.jpg";
-import heroMeeting from "../../assets/home/hero-bg-meeting.jpg";
-import type { HeroSlide } from "../../locales/home";
+/*
+ * Hero — static, single-message. Replaced the previous three-slide
+ * autoplay carousel after the impeccable critique (see PRODUCT.md anti-
+ * references: dark-mode-with-neon, glassmorphism, AI-startup gradients).
+ * Filename preserved to avoid churning imports; treat the "Carousel" in
+ * the name as historical.
+ *
+ * Layout: two-column left-aligned on lg+. Left: eyebrow → headline →
+ * description → primary CTA + install-copy button → source-mirror row.
+ * Right: persistent Bell-state code panel with "Run in Composer →"
+ * footer. Below lg the proof stacks under the CTA row, still visible.
+ */
+import type { HomeMessages } from "../../locales/home";
 import { withBase } from "../../config/urls";
+import { CODE_MIRRORS } from "../../config/site";
 
 interface Props {
-  slides: HeroSlide[];
+  hero: HomeMessages["hero"];
+  framework: HomeMessages["framework"];
 }
 
-const { slides } = Astro.props as Props;
+const { hero, framework } = Astro.props as Props;
 const BASE = import.meta.env.BASE_URL || "/";
 
-const backgrounds = {
-  quantum: heroQuantum,
-  internship: heroInternship,
-  meeting: heroMeeting,
-};
-
-// Variant resolution is tone-aware: the outline button needs different chrome
-// on a light vs a dark hero background so it reads clearly against either.
-function resolveActionClass(
-  variant: "primary" | "outline",
-  tone: "light" | "dark",
-): string {
-  if (variant === "primary") return "mq-btn-primary";
-  return tone === "light"
-    ? "mq-btn-outline"
-    : "mq-btn border border-white/60 bg-transparent text-white hover:bg-white/10";
+function resolveHref(href: string): string {
+  return /^https?:\/\//.test(href) ? href : withBase(href, BASE);
 }
 
-function resolveHref(href: string) {
-  if (/^https?:\/\//.test(href)) return href;
-  return withBase(href, BASE);
-}
-
-// Bell-state preparation — the framework's canonical "hello world". Runs as-is
-// against the code in the docs; the sample is deliberately copy-paste-able.
-const CODE_SAMPLE = `from mindquantum.core.circuit import Circuit
-from mindquantum.core.gates import H, X
-from mindquantum.simulator import Simulator
-
-# Prepare a Bell state |\u03a6\u207a\u27e9
-circ = Circuit([H.on(0), X.on(1, 0)])
-sim = Simulator('mqvector', 2)
-sim.apply_circuit(circ)
-
-print(sim.get_qs())
-# array([0.707+0.j, 0.+0.j, 0.+0.j, 0.707+0.j])`;
+const ctaHref = resolveHref(hero.ctaHref);
+const runHref = resolveHref(hero.runInComposerHref);
 ---
 
 <section
-  class="relative overflow-hidden border-b border-border"
-  aria-label="About MindSpore Quantum"
-  data-hero-carousel
+  class="relative border-b border-border bg-background"
+  aria-labelledby="hero-headline"
 >
-  <div class="relative" data-hero-track>
-    {slides.map((slide, index) => {
-      const bg = backgrounds[slide.background];
-      const titleColor = slide.tone === "light" ? "text-foreground" : "text-white";
-      const subColor = slide.tone === "light" ? "text-muted-foreground" : "text-white/85";
-      const eyebrowColor = slide.tone === "light" ? "text-primary" : "text-white";
-      const isFirst = index === 0;
-      return (
-        <article
-          class:list={[
-            "hero-slide absolute inset-0 transition-opacity duration-700 ease-out-expo",
-            isFirst ? "opacity-100" : "opacity-0",
-          ]}
-          data-hero-slide
-          data-index={index}
-          aria-hidden={isFirst ? "false" : "true"}
+  <div class="mq-container py-16 md:py-20 lg:py-24">
+    <div class="grid lg:grid-cols-12 gap-x-10 xl:gap-x-14 gap-y-10 lg:gap-y-0 items-center">
+      <div class="lg:col-span-7 min-w-0">
+        {hero.eyebrow && (
+          <p
+            class="mq-eyebrow text-muted-foreground mb-5 mq-animate-in"
+            style="--mq-delay: 0ms"
+          >
+            {hero.eyebrow}
+          </p>
+        )}
+        <h1
+          id="hero-headline"
+          class="mq-display text-balance mb-5 mq-animate-in"
+          style="--mq-delay: 80ms"
         >
-          <Image
-            src={bg}
-            alt=""
-            class="absolute inset-0 h-full w-full object-cover"
-            loading={isFirst ? "eager" : "lazy"}
-            widths={[800, 1280, 1920]}
-            sizes="100vw"
-          />
-          {slide.tone === "light" ? (
-            <div class="absolute inset-0 bg-gradient-to-r from-background/95 via-background/70 to-background/30" />
-          ) : (
-            <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/20" />
-          )}
+          {hero.headline}
+        </h1>
+        <p
+          class="text-lg text-muted-foreground mq-measure mb-8 mq-animate-in"
+          style="--mq-delay: 160ms"
+        >
+          {hero.description}
+        </p>
 
-          <div class="relative mq-container py-20 md:py-28 lg:py-32">
-            <div class="max-w-xl lg:max-w-[34rem] xl:max-w-[36rem]">
-              {slide.eyebrow && (
-                <p
-                  class:list={[
-                    "mq-eyebrow mb-4",
-                    eyebrowColor,
-                    isFirst && "mq-animate-in",
-                  ]}
-                  style={isFirst ? "--mq-delay: 0ms" : undefined}
-                >
-                  {slide.eyebrow}
-                </p>
-              )}
-              <h1
-                class:list={[
-                  "mq-display mb-5",
-                  titleColor,
-                  isFirst && "mq-animate-in",
-                ]}
-                style={isFirst ? "--mq-delay: 80ms" : undefined}
+        <div
+          class="flex flex-wrap items-center gap-3 mq-animate-in"
+          style="--mq-delay: 240ms"
+        >
+          <a href={ctaHref} class="mq-btn-primary px-6">
+            <span>{hero.ctaLabel}</span>
+            <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24">
+              <path
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5 12h14m-6-6l6 6l-6 6"
+              />
+            </svg>
+          </a>
+          <button
+            type="button"
+            class="mq-btn-run gap-2 font-mono text-sm"
+            data-install-copy
+            data-copy-text={framework.installCmd}
+            data-copied-label={framework.installCopiedLabel}
+            data-manual-label={framework.installManualLabel}
+            aria-label={`Copy ${framework.installCmd}`}
+          >
+            <span data-install-label>{framework.installCmd}</span>
+            <svg aria-hidden="true" class="w-3.5 h-3.5 opacity-80" viewBox="0 0 24 24">
+              <path
+                fill="currentColor"
+                d="M9 2h9a2 2 0 0 1 2 2v13h-2V4H9V2Zm-4 4h9a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm0 2v13h9V8H5Z"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <p
+          class="mt-8 text-sm text-muted-foreground flex flex-wrap items-center gap-x-1.5 gap-y-1 mq-animate-in"
+          style="--mq-delay: 320ms"
+        >
+          <span class="font-medium text-foreground/70">{hero.mirrorsLabel}</span>
+          {CODE_MIRRORS.map((mirror) => (
+            <>
+              <span aria-hidden="true" class="text-muted-foreground/50">·</span>
+              <a
+                href={mirror.href}
+                target="_blank"
+                rel="noopener"
+                class="mq-focus-ring rounded-sm text-foreground hover:text-primary transition-colors"
               >
-                {slide.title}
-              </h1>
-              <p
-                class:list={[
-                  "text-lg mb-8 mq-measure",
-                  subColor,
-                  isFirst && "mq-animate-in",
-                ]}
-                style={isFirst ? "--mq-delay: 160ms" : undefined}
-              >
-                {slide.subtitle}
-              </p>
-              <div
-                class:list={[
-                  "flex flex-wrap gap-3",
-                  isFirst && "mq-animate-in",
-                ]}
-                style={isFirst ? "--mq-delay: 240ms" : undefined}
-              >
-                {slide.actions.map((action) => (
-                  <a
-                    href={resolveHref(action.href)}
-                    target={action.external ? "_blank" : undefined}
-                    rel={action.external ? "noopener" : undefined}
-                    class:list={[
-                      "px-6 gap-2",
-                      resolveActionClass(action.variant, slide.tone),
-                    ]}
-                  >
-                    {action.icon === "play" && (
-                      <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M8 5v14l11-7L8 5Z" />
-                      </svg>
-                    )}
-                    <span>{action.label}</span>
-                  </a>
-                ))}
-              </div>
-            </div>
-          </div>
-        </article>
-      );
-    })}
-    <div class="min-h-[460px] md:min-h-[520px] lg:min-h-[560px]" aria-hidden="true"></div>
-  </div>
+                {mirror.label}
+                <span class="sr-only"> {hero.opensInNewTab}</span>
+              </a>
+            </>
+          ))}
+        </p>
+      </div>
 
-  <!-- Persistent code sample — the "interactive proof" per the design brief.
-       Floats on the right side of the hero on large screens; hidden below lg. -->
-  <aside
-    class="mq-animate-in hidden lg:flex absolute right-6 xl:right-10 top-20 bottom-20 xl:top-24 xl:bottom-24 w-[40%] max-w-[460px] z-[5] flex-col rounded-xl border border-border bg-card shadow-sm overflow-hidden"
-    style="--mq-delay: 360ms"
-    aria-label="Sample MindQuantum code"
-  >
-    <header class="flex items-center justify-between px-4 py-2.5 border-b border-border">
-      <span class="text-[11px] font-mono text-muted-foreground tracking-tight">
-        bell_state.py
-      </span>
-      <span class="text-[10px] font-mono uppercase tracking-[0.14em] text-muted-foreground/70">
-        python
-      </span>
-    </header>
-    <pre class="flex-1 overflow-auto p-5 text-[12.5px] leading-[1.7] font-mono text-foreground/90 m-0"><code>{CODE_SAMPLE}</code></pre>
-  </aside>
-
-  <button
-    type="button"
-    aria-label="Previous slide"
-    data-hero-prev
-    class="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-background/85 border border-border flex items-center justify-center text-foreground hover:bg-background transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-  >
-    <svg aria-hidden="true" class="w-5 h-5" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m15 18l-6-6l6-6" /></svg>
-  </button>
-  <button
-    type="button"
-    aria-label="Next slide"
-    data-hero-next
-    class="absolute left-16 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-background/85 border border-border flex items-center justify-center text-foreground hover:bg-background transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 lg:left-[unset] lg:right-4"
-  >
-    <svg aria-hidden="true" class="w-5 h-5" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m9 18l6-6l-6-6" /></svg>
-  </button>
-
-  <div
-    class="absolute bottom-6 left-6 flex gap-2 z-10"
-    role="tablist"
-    aria-label="Slide selector"
-  >
-    {slides.map((_slide, index) => (
-      <button
-        type="button"
-        data-hero-dot
-        data-index={index}
-        role="tab"
-        aria-selected={index === 0 ? "true" : "false"}
-        aria-label={`Go to slide ${index + 1}`}
-        class="h-2 w-6 rounded-sm bg-foreground/25 hover:bg-foreground/50 transition-all data-[active=true]:w-10 data-[active=true]:bg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-        data-active={index === 0 ? "true" : "false"}
-      />
-    ))}
+      <aside
+        class="lg:col-span-5 min-w-0 mq-animate-in"
+        style="--mq-delay: 360ms"
+        aria-label={hero.proofAriaLabel}
+      >
+        <figure class="mq-card overflow-hidden">
+          <figcaption class="flex items-center justify-between px-4 py-2.5 border-b border-border bg-secondary/60">
+            <span class="text-[11px] font-mono text-muted-foreground tracking-tight">
+              {hero.proofTitle}
+            </span>
+            <span class="text-[10px] font-mono uppercase tracking-[0.14em] text-muted-foreground">
+              {hero.proofLang}
+            </span>
+          </figcaption>
+          <pre
+            class="overflow-auto p-5 text-[12.5px] leading-[1.7] font-mono text-foreground/90 m-0"
+            lang={hero.proofLang}
+          ><code>{hero.proofCode}</code></pre>
+          <a
+            href={runHref}
+            class="mq-focus-ring flex items-center justify-between px-4 py-3 border-t border-border text-sm text-foreground hover:bg-secondary/50 hover:text-primary transition-colors"
+          >
+            <span>{hero.runInComposerLabel}</span>
+            <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24">
+              <path
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M5 12h14m-6-6l6 6l-6 6"
+              />
+            </svg>
+          </a>
+        </figure>
+      </aside>
+    </div>
   </div>
 </section>
 
 <script>
+  /*
+   * Install-copy binding. The same [data-install-copy] selector is used by
+   * FrameworkIntro further down the page; both scripts run on load and
+   * iterate all matching buttons. The `dataset.copyBound` flag prevents
+   * double-binding regardless of script execution order.
+   */
   (function () {
-    const root = document.querySelector("[data-hero-carousel]") as HTMLElement | null;
-    if (!root) return;
-    const slides = Array.from(root.querySelectorAll<HTMLElement>("[data-hero-slide]"));
-    const dots = Array.from(root.querySelectorAll<HTMLElement>("[data-hero-dot]"));
-    const prev = root.querySelector<HTMLButtonElement>("[data-hero-prev]");
-    const next = root.querySelector<HTMLButtonElement>("[data-hero-next]");
-    if (slides.length === 0) return;
+    document.querySelectorAll<HTMLButtonElement>("[data-install-copy]").forEach((button) => {
+      if (button.dataset.copyBound === "true") return;
+      button.dataset.copyBound = "true";
 
-    let index = 0;
-    let timer: ReturnType<typeof setInterval> | null = null;
-    const DELAY = 6500;
+      const text = button.getAttribute("data-copy-text") || "";
+      const copiedLabel = button.getAttribute("data-copied-label") || "Copied";
+      const manualLabel =
+        button.getAttribute("data-manual-label") ||
+        "Copy failed \u2014 press \u2318C / Ctrl+C";
+      const labelEl = button.querySelector<HTMLElement>("[data-install-label]");
+      const originalLabel = labelEl?.textContent || text;
 
-    // Honor the user's motion preference. When reduced motion is requested,
-    // autoplay is disabled entirely; the user drives slide advancement via
-    // dots / arrows only.
-    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-
-    function show(i: number) {
-      index = (i + slides.length) % slides.length;
-      slides.forEach((el, j) => {
-        const isActive = j === index;
-        el.style.opacity = isActive ? "1" : "0";
-        el.style.pointerEvents = isActive ? "auto" : "none";
-        el.setAttribute("aria-hidden", isActive ? "false" : "true");
-      });
-      dots.forEach((dot, j) => {
-        const isActive = j === index;
-        dot.dataset.active = isActive ? "true" : "false";
-        dot.setAttribute("aria-selected", isActive ? "true" : "false");
-      });
-    }
-
-    function start() {
-      stop();
-      if (reduceMotion.matches) return;
-      timer = setInterval(() => show(index + 1), DELAY);
-    }
-    function stop() {
-      if (timer) {
-        clearInterval(timer);
-        timer = null;
+      function flashLabel(label: string, holdMs: number) {
+        if (labelEl) labelEl.textContent = label;
+        button.classList.remove("mq-flash");
+        void button.offsetWidth;
+        button.classList.add("mq-flash");
+        setTimeout(() => {
+          if (labelEl) labelEl.textContent = originalLabel;
+          button.classList.remove("mq-flash");
+          button.removeAttribute("data-copy-state");
+        }, holdMs);
       }
-    }
 
-    // Re-evaluate autoplay if the user toggles their reduced-motion pref
-    // while the page is open (rare but correct).
-    reduceMotion.addEventListener("change", () => {
-      if (reduceMotion.matches) stop();
-      else start();
-    });
-
-    prev?.addEventListener("click", () => {
-      show(index - 1);
-      start();
-    });
-    next?.addEventListener("click", () => {
-      show(index + 1);
-      start();
-    });
-    dots.forEach((dot, i) => {
-      dot.addEventListener("click", () => {
-        show(i);
-        start();
+      button.addEventListener("click", async () => {
+        try {
+          if (!navigator.clipboard || !navigator.clipboard.writeText) {
+            throw new Error("clipboard unavailable");
+          }
+          await navigator.clipboard.writeText(text);
+          button.setAttribute("data-copy-state", "success");
+          flashLabel(copiedLabel, 1500);
+        } catch (_) {
+          button.setAttribute("data-copy-state", "error");
+          try {
+            const range = document.createRange();
+            if (labelEl) range.selectNodeContents(labelEl);
+            const sel = window.getSelection();
+            sel?.removeAllRanges();
+            if (labelEl) sel?.addRange(range);
+          } catch (_err) {
+            /* selection unavailable */
+          }
+          flashLabel(manualLabel, 2800);
+        }
       });
     });
-    root.addEventListener("mouseenter", stop);
-    root.addEventListener("mouseleave", start);
-    root.addEventListener("focusin", stop);
-    root.addEventListener("focusout", (e) => {
-      if (!root.contains(e.relatedTarget as Node)) start();
-    });
-
-    show(0);
-    start();
   })();
 </script>
