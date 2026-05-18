@@ -30,14 +30,30 @@ export type HeroSlide = {
   }>;
 };
 
-export type ArchitectureRow = {
+export type ArchitectureParadigm = {
   label: string;
-  cells: Array<string | null>;
-  /* If set, every non-null cell in this row becomes a link to `href` and
-     picks up a hover affordance (underline + foreground color). Used to
-     invite drilling into algorithm / simulator documentation directly from
-     the capability matrix instead of leaving the grid as dead text. */
+  items: string;
+  /* Optional deep-link override per paradigm cell. When set, the paradigm
+     cell renders as its own anchor (e.g. Universal → algorithm.library,
+     Variational → algorithm.nisq, Quantum-inspired → algorithm.qaia)
+     instead of inheriting the layer-level href. Only used inside the
+     Algorithm Library layer; the other four layers don't have paradigm
+     subgroups at all. */
   href?: string;
+};
+
+/* A horizontal band in the framework architecture stack. The top layer
+   (Algorithm Library) is the only one with a real "vertical" classification
+   — Universal vs Variational vs Quantum-inspired paradigms — so it ships
+   its own `paradigms` triple. The remaining layers (QNN, Compiler, DSL,
+   Simulator) are flat component lists. Modelling those two cases as two
+   different shapes keeps the diagram honest: paradigm columns no longer
+   apply to layers that don't actually have paradigms. */
+export type ArchitectureLayer = {
+  label: string;
+  href?: string;
+  paradigms?: ArchitectureParadigm[];
+  components?: string[];
 };
 
 export type HomeMessages = {
@@ -57,8 +73,8 @@ export type HomeMessages = {
     docsLabel: string;
   };
   architecture: {
-    columnHeaders: [string, string, string];
-    rows: ArchitectureRow[];
+    heading: string;
+    layers: ArchitectureLayer[];
   };
   hero: {
     // Legacy fields (kept for backwards compatibility)
@@ -186,40 +202,52 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
       docsLabel: "Documentation",
     },
     architecture: {
-      columnHeaders: [
-        "Universal quantum algorithm",
-        "Variational quantum algorithm",
-        "Quantum inspired algorithm",
-      ],
-      rows: [
+      heading: "Architecture",
+      layers: [
         {
           label: "Algorithm Library",
-          cells: ["Grover / Shor / HHL", "VQE / QAOA / QNN", "SB / LQA / SimCIM"],
-          href: "/documentation/#algorithms",
+          href: "/api/en/#/api_python_en/mindquantum.algorithm.html",
+          paradigms: [
+            {
+              label: "Universal",
+              items: "Grover / Shor / HHL",
+              href: "/api/en/#/api_python_en/algorithm/mindquantum.algorithm.library.html",
+            },
+            {
+              label: "Variational",
+              items: "VQE / QAOA / QNN",
+              href: "/api/en/#/api_python_en/algorithm/mindquantum.algorithm.nisq.html",
+            },
+            {
+              label: "Quantum-inspired",
+              items: "SB / LQA / SimCIM",
+              href: "/api/en/#/api_python_en/algorithm/mindquantum.algorithm.qaia.html",
+            },
+          ],
         },
         {
           label: "Quantum Neural Network",
-          cells: ["Encoder", "Ansatz", "QRam"],
-          href: "/documentation/#quantum-neural-networks",
+          href: "/api/en/#/api_python_en/algorithm/mindquantum.algorithm.nisq.html",
+          components: ["Encoder", "Ansatz", "QRam"],
         },
         {
           label: "Compiler",
-          cells: ["Quantum Circuit Compilation", "Qubit Mapping", null],
-          href: "/documentation/#compiler",
+          href: "/api/en/#/api_python_en/algorithm/mindquantum.algorithm.compiler.html",
+          components: ["Quantum Circuit Compilation", "Qubit Mapping"],
         },
         {
           label: "Domain Specific Language",
-          cells: ["Quantum Gate", "Quantum Circuit", "Quantum Operator"],
-          href: "/documentation/#dsl",
+          href: "/api/en/#/api_python_en/mindquantum.core.html",
+          components: ["Quantum Gate", "Quantum Circuit", "Quantum Operator"],
         },
         {
           label: "Simulator",
-          cells: [
+          href: "/api/en/#/api_python_en/mindquantum.simulator.html",
+          components: [
             "Full Amplitude Simulator",
             "Density Matrix Simulator",
             "Quantum Chemistry Simulator",
           ],
-          href: "/documentation/#simulators",
         },
       ],
     },
@@ -407,32 +435,48 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
       docsLabel: "文档",
     },
     architecture: {
-      columnHeaders: ["通用量子算法", "变分量子算法", "量子启发算法"],
-      rows: [
+      heading: "框架架构",
+      layers: [
         {
           label: "算法库",
-          cells: ["Grover / Shor / HHL", "VQE / QAOA / QNN", "SB / LQA / SimCIM"],
-          href: "/zh/documentation/#algorithms",
+          href: "/api/zh/#/api_python/mindquantum.algorithm.html",
+          paradigms: [
+            {
+              label: "通用算法",
+              items: "Grover / Shor / HHL",
+              href: "/api/zh/#/api_python/algorithm/mindquantum.algorithm.library.html",
+            },
+            {
+              label: "变分算法",
+              items: "VQE / QAOA / QNN",
+              href: "/api/zh/#/api_python/algorithm/mindquantum.algorithm.nisq.html",
+            },
+            {
+              label: "量子启发算法",
+              items: "SB / LQA / SimCIM",
+              href: "/api/zh/#/api_python/algorithm/mindquantum.algorithm.qaia.html",
+            },
+          ],
         },
         {
           label: "量子神经网络",
-          cells: ["编码器", "拟设", "QRam"],
-          href: "/zh/documentation/#quantum-neural-networks",
+          href: "/api/zh/#/api_python/algorithm/mindquantum.algorithm.nisq.html",
+          components: ["编码器", "拟设", "QRam"],
         },
         {
           label: "编译器",
-          cells: ["量子电路编译", "量子比特映射", null],
-          href: "/zh/documentation/#compiler",
+          href: "/api/zh/#/api_python/algorithm/mindquantum.algorithm.compiler.html",
+          components: ["量子电路编译", "量子比特映射"],
         },
         {
           label: "领域专用语言",
-          cells: ["量子门", "量子电路", "量子算符"],
-          href: "/zh/documentation/#dsl",
+          href: "/api/zh/#/api_python/mindquantum.core.html",
+          components: ["量子门", "量子电路", "量子算符"],
         },
         {
           label: "模拟器",
-          cells: ["全振幅模拟器", "密度矩阵模拟器", "量子化学模拟器"],
-          href: "/zh/documentation/#simulators",
+          href: "/api/zh/#/api_python/mindquantum.simulator.html",
+          components: ["全振幅模拟器", "密度矩阵模拟器", "量子化学模拟器"],
         },
       ],
     },

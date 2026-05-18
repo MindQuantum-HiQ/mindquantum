@@ -18,78 +18,174 @@ function resolveHref(href: string): string {
 }
 ---
 
-<section class="mq-container mb-20">
-  <div class="grid md:grid-cols-2 gap-10 lg:gap-12 items-start">
-    <div class="mq-card bg-background p-6">
-      <table class="w-full text-xs md:text-sm border-collapse">
-        <thead>
-          <tr>
-            <th class="w-[30%]"></th>
-            {architecture.columnHeaders.map((header) => (
-              <th class="text-center font-semibold text-foreground pb-3 px-1">
-                {header}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {architecture.rows.map((row) => (
-            <tr class="border-t border-border/60">
-              <th scope="row" class="text-left font-semibold text-foreground py-2 pr-3 whitespace-normal align-top">
-                {row.label}
-              </th>
-              {row.cells.map((cell) => (
-                <td class="py-3 px-2 align-top text-center text-xs md:text-sm text-muted-foreground">
-                  {cell ? (
-                    row.href ? (
-                      <a
-                        href={resolveHref(row.href)}
-                        class="block transition-colors hover:text-foreground hover:underline underline-offset-4 decoration-border hover:decoration-foreground/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm"
-                      >
-                        {cell}
-                      </a>
-                    ) : (
-                      <span class="block">{cell}</span>
-                    )
-                  ) : (
-                    <span class="block text-muted-foreground/40" aria-hidden="true">—</span>
-                  )}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-
-    <div>
+<section class="mq-container mb-20 lg:mb-24">
+  {/* Intro band: release link + description on the left, install/docs CTAs on the right. */}
+  <div class="grid lg:grid-cols-12 gap-x-12 gap-y-7 items-start lg:items-end mb-12 lg:mb-16">
+    <div class="lg:col-span-7">
       <a href={releaseHref} class="mq-link-arrow text-sm">
         {framework.release}
-        <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6l6 6l-6 6" /></svg>
+        <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24">
+          <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6l6 6l-6 6" />
+        </svg>
       </a>
-      <p class="mq-measure mt-4 text-sm leading-relaxed text-muted-foreground">
+      <p class="mq-measure mt-4 text-base lg:text-[1.0625rem] leading-relaxed text-muted-foreground">
         {framework.description}
       </p>
-      <div class="mt-6 flex flex-wrap gap-3 items-center">
-        <button
-          type="button"
-          class="mq-btn-run gap-2 font-mono text-sm"
-          data-install-copy
-          data-copy-text={framework.installCmd}
-          data-copied-label={framework.installCopiedLabel}
-          data-manual-label={framework.installManualLabel}
-          aria-label={`Copy ${framework.installCmd}`}
-        >
-          <span data-install-label>{framework.installCmd}</span>
-          <svg aria-hidden="true" class="w-3.5 h-3.5 opacity-80" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M9 2h9a2 2 0 0 1 2 2v13h-2V4H9V2Zm-4 4h9a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm0 2v13h9V8H5Z" />
-          </svg>
-        </button>
-        <a href={releaseHref} class="mq-btn-outline">
-          {framework.docsLabel}
-        </a>
-      </div>
     </div>
+
+    <div class="lg:col-span-5 flex flex-wrap items-center gap-3 lg:justify-end">
+      <button
+        type="button"
+        class="mq-btn-run gap-2 font-mono text-sm"
+        data-install-copy
+        data-copy-text={framework.installCmd}
+        data-copied-label={framework.installCopiedLabel}
+        data-manual-label={framework.installManualLabel}
+        aria-label={`Copy ${framework.installCmd}`}
+      >
+        <span data-install-label>{framework.installCmd}</span>
+        <svg aria-hidden="true" class="w-3.5 h-3.5 opacity-80" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M9 2h9a2 2 0 0 1 2 2v13h-2V4H9V2Zm-4 4h9a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm0 2v13h9V8H5Z" />
+        </svg>
+      </button>
+      <a href={releaseHref} class="mq-btn-outline">
+        {framework.docsLabel}
+      </a>
+    </div>
+  </div>
+
+  {/*
+   * Framework stack.
+   *
+   * Vertical classification: the layers stack from "user-facing" at the top
+   * (Algorithm Library, the algorithms a caller invokes) to "execution"
+   * at the bottom (Simulator, the backends those circuits run on). Only
+   * the top layer carries a paradigm sub-split (Universal vs Variational
+   * vs Quantum-inspired) because no other layer is partitioned that way.
+   * The rest list their constituent components inline.
+   */}
+  <div>
+    <span class="mq-eyebrow mb-5 block">{architecture.heading}</span>
+
+    <ol class="border-t border-border">
+      {architecture.layers.map((layer, idx) => {
+        const num = String(idx + 1).padStart(2, "0");
+        const layerHref = resolveHref(layer.href ?? "");
+        /* Normalize both layer shapes (paradigm subgroups vs flat component
+           list) into a fixed-length array of three cells. Paradigms keep
+           their caption (Universal / Variational / Quantum-inspired) AND an
+           optional per-cell href; component layers leave both blank. Every
+           layer renders the same three-column grid, which keeps the rhythm
+           consistent without pretending non-Algorithm-Library layers have
+           a paradigm split. */
+        type Cell = { caption?: string; content: string; href?: string } | null;
+        const cells: Cell[] = layer.paradigms
+          ? layer.paradigms.map((p) => ({ caption: p.label, content: p.items, href: p.href }))
+          : (layer.components ?? []).map((c) => ({ content: c }));
+        while (cells.length < 3) cells.push(null);
+
+        /* When a layer's cells carry their own hrefs (today: only Algorithm
+           Library), the row's clickable surface fragments: the layer label
+           links to the module overview, each paradigm cell links to its own
+           sub-module. Other layers stay as a single row-as-link target. */
+        const cellsAreLinks = cells.some((c) => c?.href);
+
+        return (
+          <li class="border-b border-border">
+            {cellsAreLinks ? (
+              <div class="relative flex items-start gap-5 sm:gap-8 py-6 lg:py-7 px-2 sm:px-3 -mx-2 sm:-mx-3 rounded-sm">
+                <span class="font-mono text-sm tabular-nums text-muted-foreground/70 pt-1 w-8 sm:w-10 shrink-0">
+                  {num}
+                </span>
+
+                <div class="flex-1 min-w-0 grid md:grid-cols-[minmax(180px,1.1fr)_minmax(0,3fr)] gap-x-8 lg:gap-x-12 gap-y-4">
+                  <a
+                    href={layerHref}
+                    class="mq-focus-ring group/label self-start inline-flex items-baseline gap-2 text-lg lg:text-xl font-semibold tracking-tight text-foreground hover:text-primary transition-colors rounded-sm"
+                  >
+                    {layer.label}
+                    <svg aria-hidden="true" class="w-3.5 h-3.5 shrink-0 text-muted-foreground/50 group-hover/label:text-primary group-hover/label:translate-x-0.5 transition-all duration-300 ease-out-expo" viewBox="0 0 24 24">
+                      <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6l6 6l-6 6" />
+                    </svg>
+                  </a>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 lg:gap-x-10 gap-y-3">
+                    {cells.map((cell) => (
+                      cell?.href ? (
+                        <a
+                          href={resolveHref(cell.href)}
+                          class="mq-focus-ring group/cell relative block min-w-0 rounded-sm px-2 -mx-2 py-1.5 -my-1.5 transition-colors hover:bg-secondary/60"
+                        >
+                          {cell.caption && (
+                            <span class="mq-eyebrow opacity-80 group-hover/cell:text-foreground transition-colors mb-1.5">{cell.caption}</span>
+                          )}
+                          <p class="text-sm leading-relaxed text-muted-foreground group-hover/cell:text-foreground transition-colors">
+                            {cell.content}
+                          </p>
+                        </a>
+                      ) : (
+                        <div class="min-w-0">
+                          {cell?.caption && (
+                            <span class="mq-eyebrow opacity-80 mb-1.5">{cell.caption}</span>
+                          )}
+                          {cell ? (
+                            <p class="text-sm leading-relaxed text-muted-foreground">{cell.content}</p>
+                          ) : (
+                            <span aria-hidden="true" class="hidden sm:block"></span>
+                          )}
+                        </div>
+                      )
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <a
+                href={layerHref}
+                class="group relative flex items-start gap-5 sm:gap-8 py-6 lg:py-7 px-2 sm:px-3 -mx-2 sm:-mx-3 rounded-sm transition-colors hover:bg-secondary/60 focus-visible:bg-secondary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <span aria-hidden="true" class="pointer-events-none absolute inset-y-0 left-0 w-px bg-primary scale-y-0 origin-top transition-transform duration-300 ease-out-expo group-hover:scale-y-100"></span>
+
+                <span class="font-mono text-sm tabular-nums text-muted-foreground/70 pt-1 w-8 sm:w-10 shrink-0">
+                  {num}
+                </span>
+
+                <div class="flex-1 min-w-0 grid md:grid-cols-[minmax(180px,1.1fr)_minmax(0,3fr)] gap-x-8 lg:gap-x-12 gap-y-4">
+                  <h3 class="text-lg lg:text-xl font-semibold tracking-tight text-foreground group-hover:text-primary transition-colors">
+                    {layer.label}
+                  </h3>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-x-6 lg:gap-x-10 gap-y-3">
+                    {cells.map((cell) => (
+                      <div class="min-w-0">
+                        {cell?.caption && (
+                          <span class="mq-eyebrow opacity-80 mb-1.5">{cell.caption}</span>
+                        )}
+                        {cell ? (
+                          <p class="text-sm leading-relaxed text-muted-foreground group-hover:text-foreground transition-colors">
+                            {cell.content}
+                          </p>
+                        ) : (
+                          <span aria-hidden="true" class="hidden sm:block"></span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <svg
+                  aria-hidden="true"
+                  class="w-4 h-4 mt-2 shrink-0 text-muted-foreground/50 group-hover:text-primary group-hover:translate-x-1 transition-all duration-300 ease-out-expo"
+                  viewBox="0 0 24 24"
+                >
+                  <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m-6-6l6 6l-6 6" />
+                </svg>
+              </a>
+            )}
+          </li>
+        );
+      })}
+    </ol>
   </div>
 </section>
 
@@ -125,10 +221,6 @@ function resolveHref(href: string): string {
           button.setAttribute("data-copy-state", "success");
           flashLabel(copiedLabel, 1500);
         } catch (_) {
-          // Clipboard blocked (insecure context, permission, or old browser).
-          // Surface the failure with a readable hint rather than silently
-          // swallowing it, and select the command text so the user can
-          // copy it manually with a keyboard shortcut.
           button.setAttribute("data-copy-state", "error");
           try {
             const range = document.createRange();
