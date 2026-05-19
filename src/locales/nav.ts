@@ -54,7 +54,7 @@ export const NAV_MESSAGES: Record<Lang, NavMessages> = {
     communityItems: {
       contributionGuide: "Contribution Guide",
       developerGrowth: "Developer Growth and Certification",
-      internship: "Internship",
+      internship: "Open-source Internship",
       hackathon: "Hackathon Competition",
       koushareStream: "Group Meeting Live Stream-Koushare",
       bilibiliStream: "Group Meeting Live Stream-BiliBili",
@@ -84,8 +84,8 @@ export const NAV_MESSAGES: Record<Lang, NavMessages> = {
     communityItems: {
       contributionGuide: "贡献指南",
       developerGrowth: "开发者成长与认证",
-      internship: "实习",
-      hackathon: "黑客松比赛",
+      internship: "开源实习",
+      hackathon: "黑客松大赛",
       koushareStream: "组会直播-蔻享",
       bilibiliStream: "组会直播-哔哩哔哩",
       paperLecture: "论文精讲",

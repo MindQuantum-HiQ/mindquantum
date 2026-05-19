@@ -3,7 +3,15 @@ import { Image } from "astro:assets";
 import logo from "../../assets/home/logo.png";
 import LanguageSwitcher from "../LanguageSwitcher.astro";
 import { NAV_MESSAGES } from "../../locales/nav";
-import { CODE_MIRRORS } from "../../config/site";
+import {
+  BILIBILI_URL,
+  CODE_MIRRORS,
+  CONTRIBUTION_URL,
+  HACKATHON_URL,
+  INTERNSHIP_URL,
+  KOUSHARE_URL,
+  PAPER_LECTURE_URL,
+} from "../../config/site";
 import { type Lang } from "../../config/i18n";
 import { withBase, pathForLang } from "../../config/urls";
 
@@ -73,7 +81,7 @@ const navItems: NavItem[] = [
         items: [
           {
             label: nav.communityItems.contributionGuide,
-            href: "https://atomgit.com/mindspore/mindquantum",
+            href: CONTRIBUTION_URL,
             external: true,
           },
           {
@@ -86,8 +94,16 @@ const navItems: NavItem[] = [
       {
         title: nav.communityGroups.competitions,
         items: [
-          { label: nav.communityItems.internship, href: localized("/community/") },
-          { label: nav.communityItems.hackathon, href: localized("/community/") },
+          {
+            label: nav.communityItems.internship,
+            href: INTERNSHIP_URL,
+            external: true,
+          },
+          {
+            label: nav.communityItems.hackathon,
+            href: HACKATHON_URL,
+            external: true,
+          },
         ],
       },
       {
@@ -95,15 +111,19 @@ const navItems: NavItem[] = [
         items: [
           {
             label: nav.communityItems.koushareStream,
-            href: "https://www.koushare.com/",
+            href: KOUSHARE_URL,
             external: true,
           },
           {
             label: nav.communityItems.bilibiliStream,
-            href: "https://www.bilibili.com/",
+            href: BILIBILI_URL,
             external: true,
           },
-          { label: nav.communityItems.paperLecture, href: localized("/community/") },
+          {
+            label: nav.communityItems.paperLecture,
+            href: PAPER_LECTURE_URL,
+            external: true,
+          },
         ],
       },
     ],

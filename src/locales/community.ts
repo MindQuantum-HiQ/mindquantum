@@ -1,4 +1,12 @@
 import type { Lang } from "../config/i18n";
+import {
+  BILIBILI_URL,
+  CONTRIBUTION_URL,
+  HACKATHON_URL,
+  INTERNSHIP_URL,
+  KOUSHARE_URL,
+  PAPER_LECTURE_URL,
+} from "../config/site";
 
 export type CommunityItemMessages = {
   label: string;
@@ -72,7 +80,7 @@ export const COMMUNITY_MESSAGES: Record<Lang, CommunityMessages> = {
           {
             label: "Contribution Guide",
             description: "Learn how to contribute to MindSpore Quantum.",
-            href: "https://atomgit.com/mindspore/mindquantum",
+            href: CONTRIBUTION_URL,
           },
           {
             label: "Developer Growth and Certification",
@@ -85,14 +93,14 @@ export const COMMUNITY_MESSAGES: Record<Lang, CommunityMessages> = {
         title: "Competition Activities",
         items: [
           {
-            label: "Internship",
+            label: "Open-source Internship",
             description: "Online open-source internship tasks and opportunities.",
-            href: "https://www.mindspore.cn/community",
+            href: INTERNSHIP_URL,
           },
           {
             label: "Hackathon Competition",
             description: "Participate in quantum computing hackathons.",
-            href: "https://www.mindspore.cn/community",
+            href: HACKATHON_URL,
           },
         ],
       },
@@ -102,17 +110,17 @@ export const COMMUNITY_MESSAGES: Record<Lang, CommunityMessages> = {
           {
             label: "Group Meeting Live Stream — Koushare",
             description: "Watch live streams on Koushare.",
-            href: "https://www.koushare.com/",
+            href: KOUSHARE_URL,
           },
           {
             label: "Group Meeting Live Stream — BiliBili",
             description: "Watch live streams on BiliBili.",
-            href: "https://www.bilibili.com/",
+            href: BILIBILI_URL,
           },
           {
             label: "Paper Intensive Lecture",
             description: "Deep dive into quantum computing papers.",
-            href: "https://www.koushare.com/",
+            href: PAPER_LECTURE_URL,
           },
         ],
       },
@@ -152,7 +160,7 @@ export const COMMUNITY_MESSAGES: Record<Lang, CommunityMessages> = {
           {
             label: "贡献指南",
             description: "了解如何为 MindSpore Quantum 贡献代码。",
-            href: "https://atomgit.com/mindspore/mindquantum",
+            href: CONTRIBUTION_URL,
           },
           {
             label: "开发者成长与认证",
@@ -165,14 +173,14 @@ export const COMMUNITY_MESSAGES: Record<Lang, CommunityMessages> = {
         title: "竞赛活动",
         items: [
           {
-            label: "实习",
+            label: "开源实习",
             description: "在线开源实习任务与机会。",
-            href: "https://www.mindspore.cn/community",
+            href: INTERNSHIP_URL,
           },
           {
-            label: "黑客松比赛",
+            label: "黑客松大赛",
             description: "参加量子计算黑客松。",
-            href: "https://www.mindspore.cn/community",
+            href: HACKATHON_URL,
           },
         ],
       },
@@ -182,17 +190,17 @@ export const COMMUNITY_MESSAGES: Record<Lang, CommunityMessages> = {
           {
             label: "组会直播 — 蔻享",
             description: "在蔻享观看组会直播。",
-            href: "https://www.koushare.com/",
+            href: KOUSHARE_URL,
           },
           {
             label: "组会直播 — 哔哩哔哩",
             description: "在哔哩哔哩观看组会直播。",
-            href: "https://www.bilibili.com/",
+            href: BILIBILI_URL,
           },
           {
             label: "论文精讲",
             description: "深入解读量子计算相关论文。",
-            href: "https://www.koushare.com/",
+            href: PAPER_LECTURE_URL,
           },
         ],
       },
