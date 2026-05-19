@@ -192,8 +192,8 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
       },
     ],
     framework: {
-      release: "MindSpore Quantum V0.11 released",
-      releaseHref: "/documentation/",
+      release: "MindSpore Quantum V0.12 released",
+      releaseHref: "/docs/en/src/RELEASE/",
       description:
         "MindSpore Quantum is the open-source quantum framework from the MindSpore ecosystem. Write parameterized quantum circuits in Python, differentiate them through MindSpore's autograd, and run on CPU, GPU, or Ascend. Ships with VQE, QAOA, Grover, and quantum phase estimation, plus full-amplitude and density-matrix simulators.",
       installCmd: "pip install mindquantum",
@@ -360,7 +360,7 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
     cta: {
       title: "Start building quantum programs with MindSpore Quantum",
       installLabel: "Install",
-      installHref: "/documentation/",
+      installHref: "/docs/en/src/mindquantum_install/",
       docsLabel: "Documentation",
       docsHref: "/documentation/",
     },
@@ -389,8 +389,8 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
       },
     ],
     framework: {
-      release: "MindSpore Quantum V0.11 发布",
-      releaseHref: "/zh/documentation/",
+      release: "MindSpore Quantum V0.12 发布",
+      releaseHref: "/docs/zh/src/RELEASE/",
       description:
         "MindSpore Quantum 是 MindSpore 生态中的开源量子框架。用 Python 编写参数化量子电路，通过 MindSpore 的自动微分引擎训练，并在 CPU、GPU 或昇腾上运行。内置 VQE、QAOA、Grover 与量子相位估计，以及全振幅和密度矩阵模拟器。",
       installCmd: "pip install mindquantum",
@@ -549,7 +549,7 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
     cta: {
       title: "使用 MindSpore Quantum 开启量子编程",
       installLabel: "安装",
-      installHref: "/zh/documentation/",
+      installHref: "/docs/zh/src/mindquantum_install/",
       docsLabel: "文档",
       docsHref: "/zh/documentation/",
     },
