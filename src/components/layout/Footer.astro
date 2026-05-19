@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import logo from "../../assets/home/logo.png";
+import wechatQr from "../../assets/home/hiq-wechat.png";
 import { FOOTER_MESSAGES } from "../../locales/footer";
 import type { Lang } from "../../config/i18n";
 import { withBase } from "../../config/urls";
@@ -59,40 +60,18 @@ function resolveHref(href: string) {
 
       <div>
         <h4 class="text-sm font-semibold text-foreground mb-3">{footer.followUs.title}</h4>
-        <div
-          class="relative w-24 h-24 bg-secondary rounded-lg flex items-center justify-center"
-          aria-label={footer.followUs.placeholderLabel}
-          role="img"
-        >
-          <span class="absolute top-1.5 right-1.5 rounded-sm bg-background/85 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
-            WIP
-          </span>
-          <svg viewBox="0 0 64 64" class="w-16 h-16 text-muted-foreground" aria-hidden="true">
-            <g fill="currentColor">
-              <rect x="4" y="4" width="16" height="16" />
-              <rect x="44" y="4" width="16" height="16" />
-              <rect x="4" y="44" width="16" height="16" />
-              <rect x="24" y="10" width="4" height="4" />
-              <rect x="34" y="10" width="4" height="4" />
-              <rect x="24" y="24" width="4" height="4" />
-              <rect x="34" y="24" width="4" height="4" />
-              <rect x="28" y="30" width="4" height="4" />
-              <rect x="40" y="28" width="4" height="4" />
-              <rect x="24" y="40" width="4" height="4" />
-              <rect x="34" y="44" width="4" height="4" />
-              <rect x="44" y="32" width="4" height="4" />
-              <rect x="54" y="32" width="4" height="4" />
-              <rect x="44" y="54" width="4" height="4" />
-              <rect x="54" y="44" width="4" height="4" />
-              <rect x="50" y="50" width="4" height="4" />
-            </g>
-          </svg>
+        <div class="w-28 h-28 rounded-lg bg-white p-1.5 ring-1 ring-border">
+          <Image
+            src={wechatQr}
+            alt={footer.followUs.description}
+            width={185}
+            height={185}
+            class="h-full w-full object-contain"
+            loading="lazy"
+          />
         </div>
         <p class="text-xs text-muted-foreground mt-2 leading-snug">
           {footer.followUs.description}
-        </p>
-        <p class="text-[11px] text-muted-foreground/70 mt-1 italic">
-          {footer.followUs.placeholderLabel}
         </p>
       </div>
     </div>

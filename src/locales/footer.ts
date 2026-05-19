@@ -8,9 +8,6 @@ export type FooterMessages = {
   followUs: {
     title: string;
     description: string;
-    /* Short disclosure noting the QR image is a placeholder until the
-       production WeChat artwork lands, per docs/DESIGN.md. */
-    placeholderLabel: string;
   };
   legal: {
     copyright: string;
@@ -58,7 +55,6 @@ export const FOOTER_MESSAGES: Record<Lang, FooterMessages> = {
     followUs: {
       title: "Follow us",
       description: "HiQ Quantum Computing WeChat Official Account",
-      placeholderLabel: "Placeholder — final QR pending",
     },
     legal: {
       copyright: "© Copyright {year} | MindSpore Quantum | All rights reserved",
@@ -105,7 +101,6 @@ export const FOOTER_MESSAGES: Record<Lang, FooterMessages> = {
     followUs: {
       title: "关注我们",
       description: "HiQ 量子计算 微信公众号",
-      placeholderLabel: "占位图——正式二维码待更新",
     },
     legal: {
       copyright: "© 版权所有 {year} | MindSpore Quantum | 保留所有权利",
