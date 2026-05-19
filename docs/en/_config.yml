@@ -15,7 +15,7 @@ execute:
   execute_notebooks: off
 
 html:
-  favicon: ../_static/favicon.svg
+  favicon: ../_static/favicon.png
   use_edit_page_button: false
   use_repository_button: false
   use_issues_button: false
@@ -28,7 +28,7 @@ launch_buttons:
 
 theme:
   name: sphinx_book_theme
-  logo: ../_static/favicon.svg
+  logo: ../_static/favicon.png
   options:
     navigation_depth: 2
     show_toc_level: 2

@@ -34,7 +34,7 @@ execute:
 ################################################################################
 
 html:
-  favicon: ../docs/_static/favicon.svg
+  favicon: ../docs/_static/favicon.png
   use_edit_page_button: false
   use_repository_button: false
   use_issues_button: false
@@ -46,7 +46,7 @@ launch_buttons:
 
 theme:
   name: sphinx_book_theme
-  logo: ../docs/_static/favicon.svg
+  logo: ../docs/_static/favicon.png
   options:
     navigation_depth: 2
     show_toc_level: 2
