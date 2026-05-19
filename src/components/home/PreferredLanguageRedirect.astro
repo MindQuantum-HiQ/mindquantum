@@ -75,8 +75,9 @@ const copy = COPY[currentLang] ?? COPY[defaultLang];
   data-current-lang={currentLang}
   data-target-lang={copy.targetLang}
   data-target-path={copy.targetPath}
-  hidden
+  style="display: none;"
   role="dialog"
+  aria-hidden="true"
   aria-label={copy.suggestion}
 >
   <div class="flex-1 min-w-0">
@@ -130,6 +131,19 @@ const copy = COPY[currentLang] ?? COPY[defaultLang];
       const targetPath = root.dataset.targetPath;
       if (!currentLang || !targetLang || !targetPath) return;
 
+      function hidePrompt() {
+        root.style.display = "none";
+        root.setAttribute("aria-hidden", "true");
+        root.classList.remove("mq-animate-in");
+      }
+
+      function showPrompt() {
+        root.style.display = "flex";
+        root.removeAttribute("aria-hidden");
+        root.classList.add("mq-animate-in");
+        root.style.setProperty("--mq-delay", "320ms");
+      }
+
       // Never re-appear in the same session if already dismissed.
       try {
         if (sessionStorage.getItem(dismissKey)) return;
@@ -164,7 +178,7 @@ const copy = COPY[currentLang] ?? COPY[defaultLang];
         } catch (_) {
           /* ignore */
         }
-        window.location.href = targetPath;
+        window.location.assign(targetPath);
       });
 
       function dismiss(updatePreference: boolean) {
@@ -180,16 +194,14 @@ const copy = COPY[currentLang] ?? COPY[defaultLang];
             /* ignore */
           }
         }
-        root!.setAttribute("hidden", "");
+        hidePrompt();
       }
 
       keepBtn?.addEventListener("click", () => dismiss(true));
       closeBtn?.addEventListener("click", () => dismiss(false));
 
       // Reveal with the page-load stagger easing used across the site.
-      root.removeAttribute("hidden");
-      root.classList.add("mq-animate-in");
-      root.style.setProperty("--mq-delay", "320ms");
+      showPrompt();
     } catch (e) {
       /* no-op */
     }
