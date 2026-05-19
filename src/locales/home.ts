@@ -1,9 +1,13 @@
 import type { Lang } from "../config/i18n";
 
 export type HomeFeature = {
+  /* A single "pillar" of the framework, shaped after the whitepaper's
+     four-block architecture figure. No image field: per design brief,
+     marketing surfaces avoid code-generated abstract decoration; the
+     concrete component names in `keywords` carry the proof instead. */
   title: string;
   description: string;
-  image: "visual" | "hybrid" | "simulation" | "algorithm";
+  keywords: string[];
 };
 
 export type LearningCard = {
@@ -84,7 +88,9 @@ export type HomeMessages = {
     opensInNewTab: string;
   };
   features: {
+    eyebrow: string;
     heading: string;
+    lead: string;
     items: HomeFeature[];
   };
   research: {
@@ -279,31 +285,56 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
       opensInNewTab: "(opens in new tab)",
     },
     features: {
-      heading: "Features",
+      eyebrow: "Core capabilities",
+      heading: "User-friendly, high-performance, AI-compatible",
+      lead:
+        "MindSpore Quantum is built around the NISQ era. Four pillars take a quantum program from a Python expression to a real chip: a typed circuit DSL, differentiable circuits through MindSpore, three first-class simulator backends, and a batteries-included algorithm library.",
       items: [
         {
-          title: "Pythonic circuit DSL",
+          title: "A Pythonic circuit DSL",
           description:
-            "Compose circuits, Hamiltonians, and parameterized ansätze from typed Python primitives. Export to OpenQASM, or feed straight into the MindSpore autograd engine.",
-          image: "visual",
+            "Quantum gates, circuits, parameter resolvers, and Hamiltonians as typed Python primitives. Arbitrary control on any gate, chain-rule circuit composition, and OpenQASM export.",
+          keywords: [
+            "Quantum Gate",
+            "Quantum Circuit",
+            "Parameter Resolver",
+            "Observable",
+          ],
         },
         {
-          title: "Trainable quantum circuits",
+          title: "Differentiable end to end",
           description:
-            "Parameterized circuits differentiate through MindSpore's autograd — VQE, QAOA, and QNN models compose directly with any MindSpore optimizer.",
-          image: "hybrid",
+            "Parameterized circuits differentiate through MindSpore's autograd via the adjoint method. VQE, QAOA, and QNN models compose with any MindSpore optimizer, an order of magnitude faster on QAOA than competing frameworks.",
+          keywords: [
+            "VQE",
+            "QAOA",
+            "QNN",
+            "Adjoint gradient",
+            "Ansatz library",
+          ],
         },
         {
-          title: "CPU, GPU, and Ascend backends",
+          title: "Three backends, one model",
           description:
-            "Full-amplitude and density-matrix simulators on all three. Switch single- and double-precision per run, with no recompilation step.",
-          image: "simulation",
+            "State-vector and density-matrix simulators tuned per architecture: SIMD with OpenMP on x86, CUDA on NVIDIA, NEON on Ascend. Switch single- and double-precision per run, no recompile.",
+          keywords: [
+            "x86 (AVX)",
+            "GPU (CUDA)",
+            "Ascend (NEON)",
+            "Noise channels",
+          ],
         },
         {
           title: "Algorithms, batteries included",
           description:
-            "VQE, QAOA, Grover, and Quantum Phase Estimation ship as one-line APIs — drop-in for quantum chemistry (LiH, H₂O) and combinatorial problems (MaxCut, TSP).",
-          image: "algorithm",
+            "VQE, QAOA, Grover, Shor, HHL, and Quantum Phase Estimation as one-line APIs. A dedicated VQE quantum-chemistry simulator is open-sourced in-tree, ready for LiH, H\u2082O, and beyond.",
+          keywords: [
+            "Grover",
+            "Shor",
+            "HHL",
+            "QPE",
+            "VQE chemistry simulator",
+          ],
         },
       ],
     },
@@ -472,31 +503,56 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
       opensInNewTab: "（在新标签页打开）",
     },
     features: {
-      heading: "核心特性",
+      eyebrow: "核心能力",
+      heading: "用户友好、高性能、AI 兼容",
+      lead:
+        "MindSpore Quantum 面向 NISQ 时代构建。四大支柱将量子程序从一行 Python 表达式带到真实量子芯片：类型化的电路 DSL、通过 MindSpore 端到端可微分的电路、三套一等公民的模拟器后端，以及开箱即用的算法库。",
       items: [
         {
-          title: "Python 原生量子电路 DSL",
+          title: "Python 原生电路 DSL",
           description:
-            "用类型化的 Python 原语组合电路、哈密顿量与参数化 ansatz，可导出 OpenQASM，或直接接入 MindSpore 自动微分引擎。",
-          image: "visual",
+            "量子门、量子电路、参数解析器与哈密顿量皆以类型化 Python 原语呈现。任意门支持任意控制位，电路可链式组合，并可导出 OpenQASM。",
+          keywords: [
+            "量子门",
+            "量子电路",
+            "参数解析器",
+            "可观测量",
+          ],
         },
         {
-          title: "可训练量子电路",
+          title: "端到端可微分",
           description:
-            "参数化量子电路通过 MindSpore 自动微分引擎求导，VQE、QAOA 与 QNN 可与任意 MindSpore 优化器无缝组合。",
-          image: "hybrid",
+            "参数化量子电路通过 MindSpore 自动微分引擎求导，采用伴随方法实现高效梯度计算。VQE、QAOA 与 QNN 可直接接入任意 MindSpore 优化器，QAOA 任务较同类框架快一个数量级以上。",
+          keywords: [
+            "VQE",
+            "QAOA",
+            "QNN",
+            "伴随梯度",
+            "拟设库",
+          ],
         },
         {
-          title: "CPU、GPU 与昇腾后端",
+          title: "三种后端，统一模型",
           description:
-            "全振幅与密度矩阵模拟器同时支持三种后端，单精度 / 双精度可按需切换，无需重新编译。",
-          image: "simulation",
+            "全振幅与密度矩阵模拟器针对各架构优化：x86 上使用 SIMD 与 OpenMP，NVIDIA 上使用 CUDA，昇腾上使用 NEON。单精度与双精度可在运行时切换，无需重新编译。",
+          keywords: [
+            "x86 (AVX)",
+            "GPU (CUDA)",
+            "昇腾 (NEON)",
+            "噪声信道",
+          ],
         },
         {
           title: "算法开箱即用",
           description:
-            "VQE、QAOA、Grover 与量子相位估计均提供一行式 API，可直接用于量子化学（LiH、H₂O）与组合优化（MaxCut、TSP）。",
-          image: "algorithm",
+            "VQE、QAOA、Grover、Shor、HHL 与量子相位估计均提供一行式 API。专为 VQE 设计的量子化学模拟器已在 MindQuantum 中开源集成，可直接用于 LiH、H\u2082O 等分子的求解。",
+          keywords: [
+            "Grover",
+            "Shor",
+            "HHL",
+            "QPE",
+            "VQE 化学模拟器",
+          ],
         },
       ],
     },
