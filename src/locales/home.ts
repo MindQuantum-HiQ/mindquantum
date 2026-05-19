@@ -74,8 +74,12 @@ export type HomeMessages = {
     proofLang: string;
     proofCode: string;
     proofAriaLabel: string;
-    runInComposerLabel: string;
-    runInComposerHref: string;
+    /* Secondary link rendered in the footer of the hero proof card. Points
+       to runnable tutorials, NOT Composer — Composer is a sibling product
+       that doesn't execute MindQuantum code (yet), so promoting "Run in
+       Composer →" beneath a Python snippet was a category error. */
+    proofLinkLabel: string;
+    proofLinkHref: string;
     mirrorsLabel: string;
     opensInNewTab: string;
   };
@@ -184,8 +188,8 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
     announcements: [
       {
         id: "composer",
-        text: "Drag quantum gates into a live circuit — no install required.",
-        cta: "Open Composer",
+        text: "Composer — a standalone visual circuit editor that runs entirely in your browser.",
+        cta: "Try Composer",
         href: "/composer/",
       },
     ],
@@ -254,8 +258,8 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
       headline: "Quantum circuits, differentiated end\u2011to\u2011end",
       description:
         "Python framework for parameterized quantum circuits. CPU, GPU, and Ascend backends. Auto-differentiation via MindSpore.",
-      ctaLabel: "Try in the browser",
-      ctaHref: "/composer/",
+      ctaLabel: "Read the docs",
+      ctaHref: "/documentation/",
       proofTitle: "bell_state.py",
       proofLang: "python",
       proofCode:
@@ -271,8 +275,8 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
         "print(sim.get_qs())\n" +
         "# array([0.707+0.j, 0.+0.j, 0.+0.j, 0.707+0.j])",
       proofAriaLabel: "Sample MindQuantum code — prepare a Bell state in Python",
-      runInComposerLabel: "Open in Composer",
-      runInComposerHref: "/composer/",
+      proofLinkLabel: "More examples",
+      proofLinkHref: "/docs/en/",
       mirrorsLabel: "Source",
       opensInNewTab: "(opens in new tab)",
     },
@@ -280,9 +284,9 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
       heading: "Features",
       items: [
         {
-          title: "Visual circuit programming",
+          title: "Pythonic circuit DSL",
           description:
-            "Drag quantum gates onto a circuit and watch the state vector update in real time. Export to Python, OpenQASM, or paste straight into a Jupyter notebook.",
+            "Compose circuits, Hamiltonians, and parameterized ansätze from typed Python primitives. Export to OpenQASM, or feed straight into the MindSpore autograd engine.",
           image: "visual",
         },
         {
@@ -383,8 +387,8 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
     announcements: [
       {
         id: "composer",
-        text: "在浏览器里拖放量子门，构建电路——无需安装。",
-        cta: "打开 Composer",
+        text: "Composer——独立的可视化量子电路编辑器，完全运行于浏览器中。",
+        cta: "试用 Composer",
         href: "/zh/composer/",
       },
     ],
@@ -449,8 +453,8 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
       headline: "端到端可微分的量子电路",
       description:
         "基于 Python 的参数化量子电路框架，可运行于 CPU、GPU 与昇腾，通过 MindSpore 实现自动微分。",
-      ctaLabel: "在浏览器中试用",
-      ctaHref: "/zh/composer/",
+      ctaLabel: "阅读文档",
+      ctaHref: "/zh/documentation/",
       proofTitle: "bell_state.py",
       proofLang: "python",
       proofCode:
@@ -466,8 +470,8 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
         "print(sim.get_qs())\n" +
         "# array([0.707+0.j, 0.+0.j, 0.+0.j, 0.707+0.j])",
       proofAriaLabel: "MindQuantum 示例代码：用 Python 准备 Bell 态",
-      runInComposerLabel: "在 Composer 中打开",
-      runInComposerHref: "/zh/composer/",
+      proofLinkLabel: "更多示例",
+      proofLinkHref: "/docs/zh/",
       mirrorsLabel: "源代码",
       opensInNewTab: "（在新标签页打开）",
     },
@@ -475,9 +479,9 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
       heading: "核心特性",
       items: [
         {
-          title: "可视化电路编程",
+          title: "Python 原生量子电路 DSL",
           description:
-            "拖放量子门构建电路，实时查看态向量变化。支持导出为 Python、OpenQASM，也可直接粘贴进 Jupyter notebook。",
+            "用类型化的 Python 原语组合电路、哈密顿量与参数化 ansatz，可导出 OpenQASM，或直接接入 MindSpore 自动微分引擎。",
           image: "visual",
         },
         {

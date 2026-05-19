@@ -28,7 +28,7 @@ function resolveHref(href: string): string {
 }
 
 const ctaHref = resolveHref(hero.ctaHref);
-const runHref = resolveHref(hero.runInComposerHref);
+const proofLinkHref = resolveHref(hero.proofLinkHref);
 ---
 
 <section
@@ -137,10 +137,10 @@ const runHref = resolveHref(hero.runInComposerHref);
             lang={hero.proofLang}
           ><code>{hero.proofCode}</code></pre>
           <a
-            href={runHref}
+            href={proofLinkHref}
             class="mq-focus-ring flex items-center justify-between px-4 py-3 border-t border-border text-sm text-foreground hover:bg-secondary/50 hover:text-primary transition-colors"
           >
-            <span>{hero.runInComposerLabel}</span>
+            <span>{hero.proofLinkLabel}</span>
             <svg aria-hidden="true" class="w-4 h-4" viewBox="0 0 24 24">
               <path
                 fill="none"

@@ -13,9 +13,15 @@ const { lang, messages } = Astro.props as Props;
 
 <section class="relative overflow-hidden bg-hero-gradient">
   <div class="mq-container py-16">
-    <h1 class="text-4xl md:text-5xl font-bold text-foreground mb-3">{messages.title}</h1>
-    <p class="text-sm md:text-base text-muted-foreground max-w-2xl leading-relaxed">
+    <p class="mq-eyebrow text-muted-foreground mb-4">{messages.eyebrow}</p>
+    <h1 class="text-4xl md:text-5xl font-bold text-foreground mb-4 tracking-tight">
+      {messages.title}
+    </h1>
+    <p class="text-base md:text-lg text-muted-foreground max-w-2xl leading-relaxed">
       {messages.subtitle}
+    </p>
+    <p class="mt-4 text-sm text-muted-foreground/85 max-w-2xl leading-relaxed">
+      {messages.roadmapNote}
     </p>
   </div>
 </section>
