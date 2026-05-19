@@ -93,8 +93,6 @@ export type HomeMessages = {
     universities: string[];
     featuredUniversities: string[];
     statement: string;
-    linkLabel: string;
-    linkHref: string;
   };
   learning: {
     heading: string;
@@ -314,8 +312,6 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
       subtitle: "Over 100 papers researched based on MindSpore Quantum",
       statement:
         "100+ peer-reviewed papers from 30+ institutions — including Peking University, Tsinghua, and Shanghai Jiao Tong.",
-      linkLabel: "See the full institution list",
-      linkHref: "/community/",
       universities: COMMON_UNIVERSITIES_EN,
       featuredUniversities: [
         "Peking University",
@@ -509,8 +505,6 @@ export const HOME_MESSAGES: Record<Lang, HomeMessages> = {
       subtitle: "超过 100 篇基于 MindSpore Quantum 的论文",
       statement:
         "超过 100 篇同行评审论文，覆盖 30 余所院校——包括北京大学、清华大学与上海交通大学。",
-      linkLabel: "查看完整院校列表",
-      linkHref: "/zh/community/",
       universities: COMMON_UNIVERSITIES_ZH,
       featuredUniversities: ["北京大学", "清华大学", "上海交通大学"],
     },
