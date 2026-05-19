@@ -20,9 +20,9 @@
 
 - **Astro 5** 作为静态站点生成器，默认渲染模式为 `output: 'static'`，所有营销/内容页面均在构建时预渲染。
 - **Tailwind CSS v3**（通过 `@astrojs/tailwind`，`applyBaseStyles: false`）提供工具类层。Tailwind 通过 `src/styles/tokens.css` 中声明的 CSS 变量读取 HSL 设计令牌，确保两套令牌系统不会漂移。
-- **React 岛屿**（通过 `@astrojs/react`）仅用于真正需要交互的组件。目前只有 Benchmark 图表（Recharts）以岛屿方式水合（首个图表使用 `client:load`，其余使用 `client:visible`）。
+- **React 岛屿**（通过 `@astrojs/react`）当前在已上线页面中未被使用，能力保留以便未来引入交互式组件。
 - **Web Components / 原生 JS** 为 Composer 量子电路编辑器（`mq-circuit-builder` 自定义元素）以及首页 Hero 轮播提供能力，保持首页 JS 体积精简。
-- **Recharts**、**lucide-react**、**clsx** 与 **tailwind-merge** 作为可选运行时依赖仅在必要之处引入。
+- **lucide-react**、**clsx** 与 **tailwind-merge** 作为可选运行时依赖仅在必要之处引入；Recharts 仍作为依赖保留以供后续仪表盘使用，但目前已无页面引用。
 
 ## 站点结构与页面清单
 
@@ -34,7 +34,7 @@
 | `/composer/` | 交互式量子电路编辑器 | `src/components/pages/ComposerPage.astro`，内部复用 `mq-circuit-builder` 自定义元素 |
 | `/learning/` | 学习落地页（侧边栏 + 课程卡片） | `src/components/pages/LearningPage.astro` |
 | `/documentation/` | 文档落地页（分区卡片 + 侧边栏） | `src/components/pages/DocumentationPage.astro` |
-| `/benchmark/` | 与其他框架性能对比的基准测试图表 | `src/components/pages/BenchmarkPage.astro` + `src/components/charts/BenchmarkChart.tsx` |
+| `/benchmark/` | 与其他框架性能对比的基准测试页面（来自技术报告的静态图表） | `src/components/pages/BenchmarkPage.astro` + `src/components/pages/BenchmarkSection.astro` + `src/assets/benchmark/` 下的图像资源 |
 | `/community/` | 社区中心（代码镜像 + 贡献/竞赛/资源分区） | `src/components/pages/CommunityPage.astro` |
 | `/docs/{lang}/` | Jupyter Book 教程（iframe 嵌入，保持不变） | `src/pages/docs/[lang]/index.astro` |
 | `/api/{lang}/` | Sphinx API 参考（iframe 嵌入，保持不变） | `src/pages/api/[lang]/index.astro` |

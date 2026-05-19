@@ -1,7 +1,12 @@
 ---
-import BenchmarkChart from "../charts/BenchmarkChart.tsx";
 import type { Lang } from "../../config/i18n";
 import type { BenchmarkMessages } from "../../locales/benchmark";
+
+import BenchmarkSection from "./BenchmarkSection.astro";
+import randomCircuitCpu from "../../assets/benchmark/Random_circuit_CPU.png";
+import randomCircuitGpu from "../../assets/benchmark/Random_circuit_GPU.png";
+import qaoaCpu from "../../assets/benchmark/QAOA_CPU.png";
+import qaoaGpu from "../../assets/benchmark/QAOA_GPU.png";
 
 interface Props {
   lang: Lang;
@@ -9,72 +14,160 @@ interface Props {
 }
 
 const { messages } = Astro.props as Props;
-
-const randomCircuitData = [
-  { qubits: 4, Cirq: 0.001, MindQuantum: 0.002, PennyLane: 0.003, Qiskit: 0.005, Quilts: 0.006, TFQ: 0.008 },
-  { qubits: 8, Cirq: 0.003, MindQuantum: 0.004, PennyLane: 0.005, Qiskit: 0.010, Quilts: 0.012, TFQ: 0.018 },
-  { qubits: 12, Cirq: 0.008, MindQuantum: 0.010, PennyLane: 0.012, Qiskit: 0.025, Quilts: 0.030, TFQ: 0.045 },
-  { qubits: 16, Cirq: 0.020, MindQuantum: 0.025, PennyLane: 0.030, Qiskit: 0.060, Quilts: 0.075, TFQ: 0.100 },
-  { qubits: 20, Cirq: 0.060, MindQuantum: 0.080, PennyLane: 0.100, Qiskit: 0.180, Quilts: 0.220, TFQ: 0.280 },
-  { qubits: 24, Cirq: 0.180, MindQuantum: 0.250, PennyLane: 0.320, Qiskit: 0.550, Quilts: 0.700, TFQ: 0.800 },
-];
-
-const qaoaData = [
-  { qubits: 4, Cirq: 0.05, MindQuantum: 0.03, PennyLane: 0.02, Qiskit: 0.04, Quilts: 0.03, TFQ: 0.04 },
-  { qubits: 8, Cirq: 0.20, MindQuantum: 0.10, PennyLane: 0.08, Qiskit: 0.15, Quilts: 0.10, TFQ: 0.10 },
-  { qubits: 12, Cirq: 0.80, MindQuantum: 0.40, PennyLane: 0.30, Qiskit: 0.60, Quilts: 0.40, TFQ: 0.40 },
-  { qubits: 16, Cirq: 3.00, MindQuantum: 1.50, PennyLane: 1.20, Qiskit: 2.50, Quilts: 1.50, TFQ: 1.50 },
-  { qubits: 20, Cirq: 12.00, MindQuantum: 6.00, PennyLane: 5.00, Qiskit: 10.00, Quilts: 6.00, TFQ: 6.00 },
-  { qubits: 24, Cirq: 50.00, MindQuantum: 25.00, PennyLane: 20.00, Qiskit: 40.00, Quilts: 25.00, TFQ: 25.00 },
-];
-
-const vqeData = [
-  { qubits: 4, Cirq: 0.005, MindQuantum: 0.002, "MQ-mqchem": 0.002, PennyLane: 0.003, Qiskit: 0.004, Quilts: 0.003, TFQ: 0.004 },
-  { qubits: 8, Cirq: 0.05, MindQuantum: 0.02, "MQ-mqchem": 0.02, PennyLane: 0.03, Qiskit: 0.04, Quilts: 0.03, TFQ: 0.04 },
-  { qubits: 12, Cirq: 0.50, MindQuantum: 0.20, "MQ-mqchem": 0.20, PennyLane: 0.30, Qiskit: 0.40, Quilts: 0.30, TFQ: 0.40 },
-  { qubits: 16, Cirq: 5.00, MindQuantum: 2.00, "MQ-mqchem": 2.00, PennyLane: 3.00, Qiskit: 4.00, Quilts: 3.00, TFQ: 4.00 },
-  { qubits: 20, Cirq: 50.00, MindQuantum: 20.00, "MQ-mqchem": 20.00, PennyLane: 30.00, Qiskit: 40.00, Quilts: 30.00, TFQ: 40.00 },
-];
 ---
 
-<section class="relative overflow-hidden bg-hero-gradient">
-  <div class="mq-container py-16">
-    <h1 class="text-4xl md:text-5xl font-bold text-foreground mb-3">{messages.title}</h1>
-    <p class="text-sm md:text-base text-muted-foreground max-w-2xl leading-relaxed">
-      {messages.subtitle}
-    </p>
+{/* -------------------------------------------------------------------
+    HERO — asymmetric. Editorial weight on the left, a mono "spec
+    strip" on the right that reads like the header of a technical
+    report. No centered stack, no gradient text, no card chrome.
+   ------------------------------------------------------------------- */}
+<section class="border-b border-border">
+  <div class="mq-container pt-16 pb-20 lg:pt-24 lg:pb-28">
+    <div class="grid lg:grid-cols-12 gap-x-12 gap-y-12 items-end">
+      <div class="lg:col-span-8">
+        <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+          {messages.kicker}
+        </p>
+        <h1 class="mt-6 text-display-xl font-extrabold text-foreground tracking-tight max-w-[18ch]">
+          {messages.title}
+        </h1>
+        <p class="mt-7 text-lg md:text-xl text-muted-foreground leading-relaxed mq-measure">
+          {messages.subtitle}
+        </p>
+      </div>
+
+      <aside class="lg:col-span-4 lg:pl-8 lg:border-l lg:border-border">
+        <dl class="space-y-0">
+          {messages.summary.map((row, idx) => (
+            <div
+              class:list={[
+                "flex items-baseline justify-between gap-6 py-3",
+                idx === 0 ? "" : "border-t border-border",
+              ]}
+            >
+              <dt class="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                {row.label}
+              </dt>
+              <dd class="font-mono text-sm text-foreground tabular-nums text-right">
+                {row.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </aside>
+    </div>
   </div>
 </section>
 
-<section class="mq-container my-10 space-y-8">
-  <BenchmarkChart
-    client:load
-    title={messages.charts.randomCircuit.title}
-    description={messages.charts.randomCircuit.description}
-    hardwareNote={messages.charts.randomCircuit.hardwareNote}
-    xAxisLabel={messages.xAxisLabel}
-    yAxisLabel={messages.yAxisLabel}
-    data={randomCircuitData}
-    keys={["Cirq", "MindQuantum", "PennyLane", "Qiskit", "Quilts", "TFQ"]}
-  />
-  <BenchmarkChart
-    client:visible
-    title={messages.charts.qaoa.title}
-    description={messages.charts.qaoa.description}
-    hardwareNote={messages.charts.qaoa.hardwareNote}
-    xAxisLabel={messages.xAxisLabel}
-    yAxisLabel={messages.yAxisLabel}
-    data={qaoaData}
-    keys={["Cirq", "MindQuantum", "PennyLane", "Qiskit", "Quilts", "TFQ"]}
-  />
-  <BenchmarkChart
-    client:visible
-    title={messages.charts.vqe.title}
-    description={messages.charts.vqe.description}
-    hardwareNote={messages.charts.vqe.hardwareNote}
-    xAxisLabel={messages.xAxisLabel}
-    yAxisLabel={messages.yAxisLabel}
-    data={vqeData}
-    keys={["Cirq", "MindQuantum", "MQ-mqchem", "PennyLane", "Qiskit", "Quilts", "TFQ"]}
-  />
+{/* -------------------------------------------------------------------
+    METHODOLOGY — three columns of definitions. Mono labels keep the
+    "engineering manual" voice; values are semibold sans.
+   ------------------------------------------------------------------- */}
+<section class="mq-container pt-16 lg:pt-20 pb-12 lg:pb-16">
+  <h2 class="sr-only">{messages.methodology.heading}</h2>
+  <div class="grid md:grid-cols-3 gap-x-12 gap-y-10">
+    {messages.methodology.blocks.map((block) => (
+      <div>
+        <p class="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground mb-3">
+          {block.label}
+        </p>
+        <p class="text-foreground text-lg font-semibold tracking-tight leading-snug">
+          {block.value}
+        </p>
+        {block.detail && (
+          <p class="mt-2 text-sm text-muted-foreground leading-relaxed">
+            {block.detail}
+          </p>
+        )}
+      </div>
+    ))}
+  </div>
+</section>
+
+{/* -------------------------------------------------------------------
+    FRAMEWORKS — dense two-column block. The list reads like a packing
+    list: name on the left, version in mono on the right.
+   ------------------------------------------------------------------- */}
+<section class="border-y border-border bg-muted/40">
+  <div class="mq-container py-14 lg:py-20">
+    <div class="grid lg:grid-cols-12 gap-x-12 gap-y-10">
+      <div class="lg:col-span-4">
+        <h2 class="text-2xl md:text-[1.75rem] font-bold text-foreground tracking-tight leading-tight">
+          {messages.frameworks.heading}
+        </h2>
+        <p class="mt-4 text-sm text-muted-foreground leading-relaxed mq-measure">
+          {messages.frameworks.lead}
+        </p>
+      </div>
+      <div class="lg:col-span-8">
+        <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10">
+          {messages.frameworks.items.map((fw) => (
+            <li class="flex items-baseline justify-between gap-4 py-3 border-b border-border">
+              <span
+                class:list={[
+                  "text-foreground",
+                  fw.highlight ? "font-bold" : "font-medium",
+                ]}
+              >
+                {fw.name}
+              </span>
+              <span class="font-mono text-xs text-muted-foreground tabular-nums">
+                {fw.version}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+{/* -------------------------------------------------------------------
+    SECTION 01 — Random circuit. Plain background.
+   ------------------------------------------------------------------- */}
+<BenchmarkSection
+  section={messages.randomCircuit}
+  cpuImage={randomCircuitCpu}
+  gpuImage={randomCircuitGpu}
+/>
+
+{/* -------------------------------------------------------------------
+    SECTION 02 — QAOA. Tinted surface alternates rhythm with §1.
+   ------------------------------------------------------------------- */}
+<BenchmarkSection
+  section={messages.qaoa}
+  cpuImage={qaoaCpu}
+  gpuImage={qaoaGpu}
+  tinted
+/>
+
+{/* -------------------------------------------------------------------
+    CTA — paper-footer in spirit. No banner gradient, no card.
+   ------------------------------------------------------------------- */}
+<section class="border-t border-border">
+  <div class="mq-container py-16 lg:py-20">
+    <div class="grid lg:grid-cols-12 gap-x-12 gap-y-8 items-end">
+      <div class="lg:col-span-7">
+        <h2 class="text-display-md font-bold text-foreground tracking-tight">
+          {messages.cta.heading}
+        </h2>
+        <p class="mt-4 text-base md:text-lg text-muted-foreground leading-relaxed mq-measure">
+          {messages.cta.lead}
+        </p>
+      </div>
+      <div class="lg:col-span-5 flex flex-wrap gap-3 lg:justify-end">
+        <a href={messages.cta.primary.href} class="mq-btn-primary px-6">
+          {messages.cta.primary.label}
+        </a>
+        <a
+          href={messages.cta.secondary.href}
+          target="_blank"
+          rel="noopener"
+          class="mq-btn-outline px-6"
+        >
+          {messages.cta.secondary.label}
+        </a>
+      </div>
+    </div>
+  </div>
 </section>

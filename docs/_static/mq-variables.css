@@ -67,8 +67,9 @@
 
   --radius: 0.75rem;
 
-  /* Run/execute/launch accent — the ONLY warm color on marketing surfaces */
-  --brand-orange: 32 78% 55%;         /* ≈ oklch(72% 0.17 65)                */
+  /* Run/execute/launch accent — the ONLY warm color on marketing surfaces.
+     Lightness tuned so white passes WCAG AA (4.5:1) on filled buttons. */
+  --brand-orange: 28 88% 35%;         /* ≈ oklch(54% 0.16 48)                */
   --brand-orange-foreground: 0 0% 100%;
 
   /* --- Legacy brand tokens (chart-only; do not use as UI accents) --- */

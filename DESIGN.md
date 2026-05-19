@@ -21,9 +21,9 @@ This repository hosts both the MindQuantum website (Astro) and the documentation
 
 - **Astro 5** is the static site generator and the default rendering mode (`output: 'static'`). Every marketing/page route is pre-rendered at build time.
 - **Tailwind CSS v3** (via `@astrojs/tailwind`, `applyBaseStyles: false`) provides the utility layer. Tailwind reads HSL design tokens from CSS variables declared in `src/styles/tokens.css` so the two token systems never drift.
-- **React islands** (via `@astrojs/react`) are used sparingly for genuinely interactive widgets. Currently only the benchmark charts (Recharts) hydrate as islands (`client:load` for the first chart, `client:visible` for subsequent ones).
+- **React islands** (via `@astrojs/react`) are available but currently unused on any shipped page; the surface stays in place for future interactive widgets.
 - **Web Components / vanilla JS** power the Quantum Circuit Composer (`mq-circuit-builder` custom element) and the homepage hero carousel. This keeps JS payload small on the landing page.
-- **Recharts**, **lucide-react**, **clsx**, and **tailwind-merge** are opt-in runtime dependencies consumed only where needed.
+- **lucide-react**, **clsx**, and **tailwind-merge** are opt-in runtime dependencies consumed only where needed. Recharts remains an installed dependency for future dashboards but is no longer imported by any page.
 
 ## Site Structure & Page Inventory
 
@@ -35,7 +35,7 @@ The redesigned site ships the following top-level routes, each with EN and ZH va
 | `/composer/` | Interactive quantum circuit builder | `src/components/pages/ComposerPage.astro` wrapping the existing `mq-circuit-builder` web component |
 | `/learning/` | Learning landing page (sidebar + course cards) | `src/components/pages/LearningPage.astro` |
 | `/documentation/` | Documentation landing page (sections + sidebar) | `src/components/pages/DocumentationPage.astro` |
-| `/benchmark/` | Benchmark charts comparing MindQuantum with other frameworks | `src/components/pages/BenchmarkPage.astro` + `src/components/charts/BenchmarkChart.tsx` |
+| `/benchmark/` | Benchmark page comparing MindQuantum with other frameworks (paper-derived static figures) | `src/components/pages/BenchmarkPage.astro` + `src/components/pages/BenchmarkSection.astro` + assets in `src/assets/benchmark/` |
 | `/community/` | Community hub (mirrors + contribution/competition/resources sections) | `src/components/pages/CommunityPage.astro` |
 | `/docs/{lang}/` | Jupyter Book tutorials (iframe wrapper, unchanged) | `src/pages/docs/[lang]/index.astro` |
 | `/api/{lang}/` | Sphinx API reference (iframe wrapper, unchanged) | `src/pages/api/[lang]/index.astro` |
