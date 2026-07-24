@@ -12,6 +12,8 @@ export const CONTRIBUTION_URL = "https://www.mindspore.cn/contribution";
 export const INTERNSHIP_URL = "https://www.mindspore.cn/internship";
 export const HACKATHON_URL =
   "https://mp.weixin.qq.com/mp/homepage?__biz=MzI3NjAzMjA0NA%3D%3D&hid=6&sn=0b6a38402c2fbb8683826376cf7f05d2&scene=126#wechat_redirect";
+export const HACKATHON_CODE_URL =
+  "https://github.com/MindQuantum-HiQ/mindquantum-research/tree/main/hackathon";
 export const PAPER_LECTURE_URL =
   "https://mp.weixin.qq.com/mp/homepage?__biz=MzI3NjAzMjA0NA%3D%3D&hid=9&sn=6d6d53b39b5d128ae4bb0bf2c9e88962&scene=126#wechat_redirect";
 

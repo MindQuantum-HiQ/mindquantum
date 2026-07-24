@@ -2,6 +2,7 @@ import type { Lang } from "../config/i18n";
 import {
   BILIBILI_URL,
   CONTRIBUTION_URL,
+  HACKATHON_CODE_URL,
   HACKATHON_URL,
   INTERNSHIP_URL,
   KOUSHARE_URL,
@@ -102,6 +103,11 @@ export const COMMUNITY_MESSAGES: Record<Lang, CommunityMessages> = {
             description: "Participate in quantum computing hackathons.",
             href: HACKATHON_URL,
           },
+          {
+            label: "Competition Code",
+            description: "Browse code for quantum computing competitions.",
+            href: HACKATHON_CODE_URL,
+          },
         ],
       },
       {
@@ -181,6 +187,11 @@ export const COMMUNITY_MESSAGES: Record<Lang, CommunityMessages> = {
             label: "黑客松大赛",
             description: "参加量子计算黑客松。",
             href: HACKATHON_URL,
+          },
+          {
+            label: "赛事代码",
+            description: "浏览量子计算赛事相关代码。",
+            href: HACKATHON_CODE_URL,
           },
         ],
       },

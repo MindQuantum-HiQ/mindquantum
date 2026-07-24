@@ -24,6 +24,7 @@ export type NavMessages = {
     developerGrowth: string;
     internship: string;
     hackathon: string;
+    hackathonCode: string;
     koushareStream: string;
     bilibiliStream: string;
     paperLecture: string;
@@ -56,6 +57,7 @@ export const NAV_MESSAGES: Record<Lang, NavMessages> = {
       developerGrowth: "Developer Growth and Certification",
       internship: "Open-source Internship",
       hackathon: "Hackathon Competition",
+      hackathonCode: "Competition Code",
       koushareStream: "Group Meeting Live Stream-Koushare",
       bilibiliStream: "Group Meeting Live Stream-BiliBili",
       paperLecture: "Paper Intensive Lecture",
@@ -86,6 +88,7 @@ export const NAV_MESSAGES: Record<Lang, NavMessages> = {
       developerGrowth: "开发者成长与认证",
       internship: "开源实习",
       hackathon: "黑客松大赛",
+      hackathonCode: "赛事代码",
       koushareStream: "组会直播-蔻享",
       bilibiliStream: "组会直播-哔哩哔哩",
       paperLecture: "论文精讲",
