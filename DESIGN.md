@@ -16,6 +16,7 @@ This repository hosts both the MindQuantum website (Astro) and the documentation
 - Two Jupyter Book projects in `docs/en` and `docs/zh`. Build outputs are centralized under `docs/_build/books/{lang}` and copied to `public/docs/{lang}`, which Astro serves at `/docs/{lang}/`.
 - API (Sphinx) builds as two projects in `docs/api-en` and `docs/api-zh`. Outputs are centralized under `docs/_build/api/{lang}` and copied to `public/docs/api/{lang}`.
 - GitHub Actions builds docs (Jupyter Book + Sphinx) first, then Astro, and deploys the combined `dist/`.
+- The Jupyter Book `_config.yml` files keep a `{year}` placeholder in their `copyright` field (YAML cannot compute the current year). `scripts/update-copyright.mjs` substitutes the build year for the duration of `build:docs` and restores the placeholder afterwards, so the committed configs stay self-documenting and the working tree stays clean. The Astro footer and the Sphinx API configs compute the year dynamically.
 
 ## Frontend Stack
 

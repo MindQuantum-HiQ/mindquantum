@@ -15,6 +15,7 @@
 - 两个 Jupyter Book 项目分别在 `docs/en` 和 `docs/zh` 中。构建输出集中在 `docs/_build/books/{lang}` 下，并复制到 `public/docs/{lang}`，Astro 将其作为 `/docs/{lang}/` 提供服务。
 - API (Sphinx) 构建作为两个项目分别在 `docs/api-en` 和 `docs/api-zh` 中。输出集中在 `docs/_build/api/{lang}` 下，并复制到 `public/docs/api/{lang}`。
 - GitHub Actions 首先构建文档 (Jupyter Book + Sphinx)，然后构建 Astro，并部署合并后的 `dist/`。
+- Jupyter Book 的 `_config.yml` 在 `copyright` 中使用 `{year}` 占位符（YAML 无法计算当前年份）。`scripts/update-copyright.mjs` 在 `build:docs` 期间将其替换为构建年份，构建结束后还原占位符，使提交的配置文件自解释且工作区保持干净。Astro 页脚和 Sphinx API 配置则动态计算年份。
 
 ## 前端技术栈
 

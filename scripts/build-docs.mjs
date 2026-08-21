@@ -1,6 +1,7 @@
 import { spawn } from 'node:child_process'
 import { cp, mkdir, rm, stat } from 'node:fs/promises'
 import { resolve } from 'node:path'
+import { patchCopyrightYears } from './update-copyright.mjs'
 
 function run(cmd, args, opts = {}) {
   return new Promise((resolvePromise, reject) => {
@@ -75,16 +76,23 @@ async function main() {
   }
   // Sync design tokens first so docs use latest variables
   await run('node', ['scripts/prepare-tokens.mjs'])
-  // Generate _toc.yml for both books (tutorials only)
-  await run('python', ['scripts/generate_toc.py'])
-  // Normalize book sources to avoid toctree warnings and fix API tile link
-  await run('python', ['scripts/normalize_book_sources.py'])
-  await buildBook('en')
-  await buildBook('zh')
-  await buildCourses()
-  // Build API (Sphinx) and place under /docs/api/{en,zh}
-  await buildSphinx('api-en', 'en')
-  await buildSphinx('api-zh', 'zh')
+  // Jupyter Book configs carry a {year} copyright placeholder: substitute the
+  // build year for the duration of the build, then restore the placeholder
+  const restoreCopyright = await patchCopyrightYears()
+  try {
+    // Generate _toc.yml for both books (tutorials only)
+    await run('python', ['scripts/generate_toc.py'])
+    // Normalize book sources to avoid toctree warnings and fix API tile link
+    await run('python', ['scripts/normalize_book_sources.py'])
+    await buildBook('en')
+    await buildBook('zh')
+    await buildCourses()
+    // Build API (Sphinx) and place under /docs/api/{en,zh}
+    await buildSphinx('api-en', 'en')
+    await buildSphinx('api-zh', 'zh')
+  } finally {
+    await restoreCopyright()
+  }
 }
 
 main().catch((err) => {
