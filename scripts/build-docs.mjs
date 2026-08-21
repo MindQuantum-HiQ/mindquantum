@@ -76,6 +76,8 @@ async function main() {
   }
   // Sync design tokens first so docs use latest variables
   await run('node', ['scripts/prepare-tokens.mjs'])
+  // Vendor MathJax into docs/_static so formulas render without a public CDN
+  await run('node', ['scripts/prepare-mathjax.mjs'])
   // Jupyter Book configs carry a {year} copyright placeholder: substitute the
   // build year for the duration of the build, then restore the placeholder
   const restoreCopyright = await patchCopyrightYears()

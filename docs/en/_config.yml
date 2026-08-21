@@ -48,6 +48,9 @@ sphinx:
     # {year} is substituted with the build year by scripts/update-copyright.mjs
     copyright: "{year}, MindQuantum"
     language: en
+    # Self-hosted MathJax (vendored by scripts/prepare-mathjax.mjs); the CDN
+    # default is unreachable for part of the audience
+    mathjax_path: mathjax/tex-mml-chtml.js
     html_static_path: ["../_static"]
     html_css_files:
       - mq-variables.css

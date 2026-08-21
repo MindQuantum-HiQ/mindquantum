@@ -49,6 +49,8 @@ sphinx:
     copyright: "{year}, MindQuantum"
     language: zh_CN
     html_search_language: zh
+    # 自托管 MathJax（由 scripts/prepare-mathjax.mjs 拷贝），避免依赖境外 CDN
+    mathjax_path: mathjax/tex-mml-chtml.js
     html_static_path: ["../_static"]
     html_css_files:
       - mq-variables.css

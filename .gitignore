@@ -13,6 +13,7 @@ docs/en/_build/
 docs/zh/_build/
 docs/en/src/
 docs/zh/src/
+docs/_static/mathjax/
 public/docs/
 public/courses
 docs/api-en/api_python_en

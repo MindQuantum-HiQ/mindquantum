@@ -72,6 +72,8 @@ sphinx:
     # {year} 为年份占位符，构建时由 scripts/update-copyright.mjs 自动替换
     copyright: "{year}, MindQuantum"
     language: zh
+    # 自托管 MathJax（由 scripts/prepare-mathjax.mjs 拷贝），避免依赖境外 CDN
+    mathjax_path: mathjax/tex-mml-chtml.js
     html_static_path:
       - ../docs/_static
     html_css_files:

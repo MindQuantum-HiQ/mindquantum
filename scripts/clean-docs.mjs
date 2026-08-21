@@ -18,6 +18,7 @@ async function main() {
     resolve('docs/api-zh/api_python'),
     resolve('docs/en/src'),
     resolve('docs/zh/src'),
+    resolve('docs/_static/mathjax'),
   ]
   for (const t of targets) {
     await clean(t)

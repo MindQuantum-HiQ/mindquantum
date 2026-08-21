@@ -16,6 +16,7 @@
 - API (Sphinx) 构建作为两个项目分别在 `docs/api-en` 和 `docs/api-zh` 中。输出集中在 `docs/_build/api/{lang}` 下，并复制到 `public/docs/api/{lang}`。
 - GitHub Actions 首先构建文档 (Jupyter Book + Sphinx)，然后构建 Astro，并部署合并后的 `dist/`。
 - Jupyter Book 的 `_config.yml` 在 `copyright` 中使用 `{year}` 占位符（YAML 无法计算当前年份）。`scripts/update-copyright.mjs` 在 `build:docs` 期间将其替换为构建年份，构建结束后还原占位符，使提交的配置文件自解释且工作区保持干净。Astro 页脚和 Sphinx API 配置则动态计算年份。
+- MathJax 采用自托管：`scripts/prepare-mathjax.mjs` 在 `build:docs` 期间将 npm `mathjax` 包（合并组件 `tex-mml-chtml.js`、CHTML woff 字体、autoload 按需加载的 TeX 扩展）拷贝到已 gitignore 的 `docs/_static/mathjax/`，各 Sphinx / Jupyter Book 配置统一设置 `mathjax_path: mathjax/tex-mml-chtml.js`。Sphinx 默认的 jsdelivr CDN 对部分用户不可达，会导致所有公式无法渲染。
 
 ## 前端技术栈
 
