@@ -66,6 +66,9 @@ sphinx:
     - IPython.sphinxext.ipython_console_highlighting
   config:
     author: "MindQuantum Contributors"
+    # 课程笔记本沿用经典 Jupyter 的公式写法：允许段落内的 $$...$$ 按块级公式解析
+    # （jupyter-book 1.x 的 parse: 段不透传该选项，必须放在 sphinx.config 下）
+    myst_dmath_double_inline: true
     # {year} 为年份占位符，构建时由 scripts/update-copyright.mjs 自动替换
     copyright: "{year}, MindQuantum"
     language: zh

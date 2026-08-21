@@ -71,6 +71,7 @@ This dual-token approach lets the homepage and Astro chrome move to a modern Tai
 - The build does not depend on external repositories.
 - Tutorials: `scripts/sync_mindquantum_from_msdocs.py` copies MindQuantum tutorial sources from a local `mindspore/docs` clone (`docs/mindquantum/docs/source_en` and `source_zh_cn`) into `docs/en/src` and `docs/zh/src`.
 - API: `scripts/sync_mindquantum_api.py` copies API `.rst` sources from a local `mindquantum` clone (`docs/api_python_en` and `docs/api_python`) into the language-specific `src/` folders.
+- Courses: the notebooks in `courses/` are first-party content. After adding or editing a notebook, run `python scripts/normalize_course_math.py` so `$$ … $$` display math conforms to MyST's block rules (blank lines around blocks, indentation inside list items); otherwise formulas render as literal `$` text in Jupyter Book.
 
 ## Deployment
 

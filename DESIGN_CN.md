@@ -70,6 +70,7 @@
 - 构建不依赖于外部仓库。
 - 教程：`scripts/sync_mindquantum_from_msdocs.py` 将 MindQuantum 教程源文件从本地 `mindspore/docs` 克隆（`docs/mindquantum/docs/source_en` 和 `source_zh_cn`）复制到 `docs/en/src` 和 `docs/zh/src`。
 - API：`scripts/sync_mindquantum_api.py` 将 API `.rst` 源文件从本地 `mindquantum` 克隆（`docs/api_python_en` 和 `docs/api_python`）复制到特定语言的 `src/` 文件夹中。
+- 课程：`courses/` 下的笔记本为本仓库自有内容。新增或编辑笔记本后请运行 `python scripts/normalize_course_math.py`，使 `$$ … $$` 块级公式符合 MyST 的块规则（公式块前后留空行、列表项内缩进对齐），否则公式会在 Jupyter Book 中渲染为字面 `$` 文本。
 
 ## 部署
 
